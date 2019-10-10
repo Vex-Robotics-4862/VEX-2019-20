@@ -1,4 +1,8 @@
 #include "main.h"
+#define MOTOR_LEFT_BACK 2
+#define MOTOR_LEFT_FRONT 3
+#define MOTOR_RIGHT_BACK 4
+#define MOTOR_RIGHT_FRONT 1
 
 /**
  * A callback function for LLEMU's center button.
@@ -10,7 +14,7 @@ void on_center_button() {
 	static bool pressed = false;
 	pressed = !pressed;
 	if (pressed) {
-		pros::lcd::set_text(2, "I was pressed!");
+		pros::lcd::set_text(2, "Middle button toggled");
 	} else {
 		pros::lcd::clear_line(2);
 	}
@@ -24,7 +28,7 @@ void on_center_button() {
  */
 void initialize() {
 	pros::lcd::initialize();
-	pros::lcd::set_text(1, "Hello PROS User!");
+	pros::lcd::set_text(1, "Test Bot: Verson 0.1");
 
 	pros::lcd::register_btn1_cb(on_center_button);
 }
@@ -74,7 +78,13 @@ void autonomous() {}
  * task, not resume it from where it left off.
  */
 void opcontrol() {
-	pros::Controller master(pros::E_CONTROLLER_MASTER);
+	pros::Motor left_back (MOTOR_LEFT_BACK);
+  pros::Motor left_front (MOTOR_LEFT_FRONT);
+	pros::Motor right_back (MOTOR_RIGHT_BACK);
+  pros::Motor right_front (MOTOR_RIGHT_FRONT);
+
+
+	/*pros::Controller master(pros::E_CONTROLLER_MASTER);
 	pros::Motor left_mtr(1);
 	pros::Motor right_mtr(2);
 
@@ -88,5 +98,5 @@ void opcontrol() {
 		left_mtr = left;
 		right_mtr = right;
 		pros::delay(20);
-	}
+	}*/
 }
