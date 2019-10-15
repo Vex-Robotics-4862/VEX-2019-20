@@ -1,8 +1,8 @@
 #include "main.h"
 #define MOTOR_LEFT_BACK 2
-#define MOTOR_LEFT_FRONT 3
+#define MOTOR_LEFT_FRONT 1
+#define MOTOR_RIGHT_FRONT 3
 #define MOTOR_RIGHT_BACK 4
-#define MOTOR_RIGHT_FRONT 1
 
 /**
  * A callback function for LLEMU's center button.
@@ -91,12 +91,31 @@ void opcontrol() {
 	pros::Motor right_back (MOTOR_RIGHT_BACK);
   pros::Motor right_front (MOTOR_RIGHT_FRONT);
 	pros::Controller controller(pros::E_CONTROLLER_MASTER);
-
+	enum driveType { tank, right_only, left_only };
+	driveType drive = right_only;
+	double mag = 0.0; //magnitude, 0.0 to 1.0
+	double dir = 0.0; //direction, 0 to 2pi
 	while (true) {
-		moveLeft(left_back, left_front, controller.get_analog(ANALOG_LEFT_Y));
-		moveRight(right_back, right_front, controller.get_analog(ANALOG_LEFT_Y));
+		switch (drive) {
+			case tank:
+				moveLeft(left_back, left_front, controller.get_analog(ANALOG_LEFT_Y));
+				moveRight(right_back, right_front, controller.get_analog(ANALOG_RIGHT_Y));
+			case right_only:
+				mag = hypot(controller.get_analog(ANALOG_LEFT_X), controller.get_analog(ANALOG_LEFT_Y));
+				dir = atan(controller.get_analog(ANALOG_LEFT_Y)/controller.get_analog(ANALOG_LEFT_X));
+				moveLeft(left_back, left_front, mag * cos(dir));
+				moveRight(right_back, right_front, mag * sin(dir));
+				//Using trigonometric ratios gives us at most -sqrt(2) against +sqrt(2)
+				//So, turning could be made more powerful than this
+			case left_only:
+				mag = hypot(controller.get_analog(ANALOG_LEFT_X), controller.get_analog(ANALOG_RIGHT_Y));
+				dir = atan(controller.get_analog(ANALOG_RIGHT_Y)/controller.get_analog(ANALOG_RIGHT_X));
+				moveLeft(left_back, left_front, mag * cos(dir));
+				moveRight(right_back, right_front, mag * sin(dir));
+		}
+
 		if (controller.get_digital(DIGITAL_A)) {
-			
+			drive = tank;
 		}
 
 		pros::delay(20);
