@@ -77,15 +77,35 @@ void autonomous() {}
  * operator control task will be stopped. Re-enabling the robot will restart the
  * task, not resume it from where it left off.
  */
+ void moveLeft(pros::Motor lb, pros::Motor lf, int velocity) {
+	 lb.move(velocity);
+	 lf.move(velocity);
+ }
+ void moveRight(pros::Motor rb, pros::Motor rf, int velocity) {
+	 rb.move(velocity);
+	 rf.move(velocity);
+ }
 void opcontrol() {
 	pros::Motor left_back (MOTOR_LEFT_BACK);
   pros::Motor left_front (MOTOR_LEFT_FRONT);
 	pros::Motor right_back (MOTOR_RIGHT_BACK);
   pros::Motor right_front (MOTOR_RIGHT_FRONT);
+	pros::Controller controller(pros::E_CONTROLLER_MASTER);
+
+	while (true) {
+		moveLeft(left_back, left_front, controller.get_analog(ANALOG_LEFT_Y));
+		moveRight(right_back, right_front, controller.get_analog(ANALOG_LEFT_Y));
+		if (controller.get_digital(DIGITAL_A)) {
+			
+		}
+
+		pros::delay(20);
+	}
 
 
-	/*pros::Controller master(pros::E_CONTROLLER_MASTER);
-	pros::Motor left_mtr(1);
+
+
+	/*pros::Motor left_mtr(1);
 	pros::Motor right_mtr(2);
 
 	while (true) {
@@ -99,4 +119,6 @@ void opcontrol() {
 		right_mtr = right;
 		pros::delay(20);
 	}*/
+
+
 }
