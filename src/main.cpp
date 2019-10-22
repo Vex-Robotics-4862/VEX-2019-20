@@ -3,6 +3,8 @@
 #define MOTOR_LEFT_FRONT 1
 #define MOTOR_RIGHT_FRONT 3
 #define MOTOR_RIGHT_BACK 4
+#define MOTOR_TRAY 5
+#define MOTOR_LIFT 6
 
 /**
  * A callback function for LLEMU's center button.
@@ -92,7 +94,7 @@ void opcontrol() {
   pros::Motor right_front (MOTOR_RIGHT_FRONT);
 	pros::Controller controller(pros::E_CONTROLLER_MASTER);
 	enum driveType { tank, right_only, left_only };
-	driveType drive = right_only;
+	driveType drive = tank;
 	double mag = 0.0; //magnitude, 0.0 to 1.0
 	double dir = 0.0; //direction, 0 to 2pi
 	while (true) {
