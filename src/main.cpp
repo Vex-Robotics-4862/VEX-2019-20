@@ -126,7 +126,11 @@ void opcontrol() {
 		if (controller.get_digital(DIGITAL_A)) {
 			drive = tank;
 		}
-
+		if (controller.get_digital(DIGITAL_L1)) {
+			tray.move(32); //At 32/128 = 25% power...?
+		} else {
+			tray.move(0);
+		}
 
 
 		pros::delay(20);
