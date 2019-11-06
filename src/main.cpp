@@ -80,8 +80,8 @@ void autonomous() {}
  * task, not resume it from where it left off.
  */
  void moveLeft(pros::Motor lb, pros::Motor lf, int velocity) {
-	 lb.move(velocity);
-	 lf.move(velocity);
+	 lb.move(-velocity);
+	 lf.move(-velocity);
  }
  void moveRight(pros::Motor rb, pros::Motor rf, int velocity) {
 	 rb.move(velocity);
@@ -92,9 +92,13 @@ void opcontrol() {
   pros::Motor left_front (MOTOR_LEFT_FRONT);
 	pros::Motor right_back (MOTOR_RIGHT_BACK);
   pros::Motor right_front (MOTOR_RIGHT_FRONT);
+	pros::Motor tray (MOTOR_TRAY);
+
 	pros::Controller controller(pros::E_CONTROLLER_MASTER);
+
+
 	enum driveType { tank, right_only, left_only };
-	driveType drive = tank;
+	driveType drive = right_only;
 	double mag = 0.0; //magnitude, 0.0 to 1.0
 	double dir = 0.0; //direction, 0 to 2pi
 	while (true) {
@@ -102,6 +106,7 @@ void opcontrol() {
 			case tank:
 				moveLeft(left_back, left_front, controller.get_analog(ANALOG_LEFT_Y));
 				moveRight(right_back, right_front, controller.get_analog(ANALOG_RIGHT_Y));
+				break;
 			case right_only:
 				mag = hypot(controller.get_analog(ANALOG_LEFT_X), controller.get_analog(ANALOG_LEFT_Y));
 				dir = atan(controller.get_analog(ANALOG_LEFT_Y)/controller.get_analog(ANALOG_LEFT_X));
@@ -109,16 +114,20 @@ void opcontrol() {
 				moveRight(right_back, right_front, mag * sin(dir));
 				//Using trigonometric ratios gives us at most -sqrt(2) against +sqrt(2)
 				//So, turning could be made more powerful than this
+				break;
 			case left_only:
 				mag = hypot(controller.get_analog(ANALOG_LEFT_X), controller.get_analog(ANALOG_RIGHT_Y));
 				dir = atan(controller.get_analog(ANALOG_RIGHT_Y)/controller.get_analog(ANALOG_RIGHT_X));
 				moveLeft(left_back, left_front, mag * cos(dir));
 				moveRight(right_back, right_front, mag * sin(dir));
+				break;
 		}
 
 		if (controller.get_digital(DIGITAL_A)) {
 			drive = tank;
 		}
+
+
 
 		pros::delay(20);
 	}
