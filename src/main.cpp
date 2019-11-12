@@ -64,7 +64,26 @@ void competition_initialize() {}
  * will be stopped. Re-enabling the robot will restart the task, not re-start it
  * from where it left off.
  */
-void autonomous() {}
+ void moveLeft(pros::Motor lb, pros::Motor lf, int velocity) {
+	lb.move(-velocity);
+	lf.move(-velocity);
+ }
+ void moveRight(pros::Motor rb, pros::Motor rf, int velocity) {
+	rb.move(velocity);
+	rf.move(velocity);
+ }
+void autonomous() {
+	pros::Motor left_back (MOTOR_LEFT_BACK);
+	pros::Motor left_front (MOTOR_LEFT_FRONT);
+	pros::Motor right_back (MOTOR_RIGHT_BACK);
+	pros::Motor right_front (MOTOR_RIGHT_FRONT);
+	pros::Motor tray (MOTOR_TRAY);
+
+
+
+
+
+}
 
 /**
  * Runs the operator control code. This function will be started in its own task
@@ -79,14 +98,7 @@ void autonomous() {}
  * operator control task will be stopped. Re-enabling the robot will restart the
  * task, not resume it from where it left off.
  */
- void moveLeft(pros::Motor lb, pros::Motor lf, int velocity) {
-	 lb.move(-velocity);
-	 lf.move(-velocity);
- }
- void moveRight(pros::Motor rb, pros::Motor rf, int velocity) {
-	 rb.move(velocity);
-	 rf.move(velocity);
- }
+
 void opcontrol() {
 	pros::Motor left_back (MOTOR_LEFT_BACK);
   pros::Motor left_front (MOTOR_LEFT_FRONT);
@@ -126,12 +138,14 @@ void opcontrol() {
 		if (controller.get_digital(DIGITAL_A)) {
 			drive = tank;
 		}
-		if (controller.get_digital(DIGITAL_L1)) {
+		if (controller.get_digital(DIGITAL_R1)) {
 			tray.move(32); //At 32/128 = 25% power...?
+		} else if (controller.get_digital(DIGITAL_R2)) {
+			tray.move(-32);
 		} else {
 			tray.move(0);
 		}
-
+		
 
 		pros::delay(20);
 	}
