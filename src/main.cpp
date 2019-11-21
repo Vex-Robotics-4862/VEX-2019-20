@@ -110,7 +110,7 @@ void opcontrol() {
 
 
 	enum driveType { tank, right_only, left_only };
-	driveType drive = right_only;
+	driveType drive = left_only;
 	double mag = 0.0; //magnitude, 0.0 to 1.0
 	double dir = 0.0; //direction, 0 to 2pi
 	while (true) {
@@ -119,7 +119,7 @@ void opcontrol() {
 				moveLeft(left_back, left_front, controller.get_analog(ANALOG_LEFT_Y));
 				moveRight(right_back, right_front, controller.get_analog(ANALOG_RIGHT_Y));
 				break;
-			case right_only:
+			case left_only:
 				mag = hypot(controller.get_analog(ANALOG_LEFT_X), controller.get_analog(ANALOG_LEFT_Y));
 				dir = atan(controller.get_analog(ANALOG_LEFT_Y)/controller.get_analog(ANALOG_LEFT_X));
 				moveLeft(left_back, left_front, mag * cos(dir));
@@ -127,8 +127,8 @@ void opcontrol() {
 				//Using trigonometric ratios gives us at most -sqrt(2) against +sqrt(2)
 				//So, turning could be made more powerful than this
 				break;
-			case left_only:
-				mag = hypot(controller.get_analog(ANALOG_LEFT_X), controller.get_analog(ANALOG_RIGHT_Y));
+			case right_only:
+				mag = hypot(controller.get_analog(ANALOG_RIGHT_X), controller.get_analog(ANALOG_RIGHT_Y));
 				dir = atan(controller.get_analog(ANALOG_RIGHT_Y)/controller.get_analog(ANALOG_RIGHT_X));
 				moveLeft(left_back, left_front, mag * cos(dir));
 				moveRight(right_back, right_front, mag * sin(dir));
@@ -139,13 +139,13 @@ void opcontrol() {
 			drive = tank;
 		}
 		if (controller.get_digital(DIGITAL_R1)) {
-			tray.move(32); //At 32/128 = 25% power...?
+			tray.move(96); //At 32/128 = 25% power...?
 		} else if (controller.get_digital(DIGITAL_R2)) {
-			tray.move(-32);
+			tray.move(-96);
 		} else {
 			tray.move(0);
 		}
-		
+
 
 		pros::delay(20);
 	}
