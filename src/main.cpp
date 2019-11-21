@@ -17,13 +17,7 @@
  * "I was pressed!" and nothing.
  */
 void on_center_button() {
-	static bool pressed = false;
-	pressed = !pressed;
-	if (pressed) {
-		pros::lcd::set_text(2, "Middle button toggled");
-	} else {
-		pros::lcd::clear_line(2);
-	}
+	//If center button is pressed
 }
 
 /**
@@ -34,7 +28,7 @@ void on_center_button() {
  */
 void initialize() {
 	pros::lcd::initialize();
-	pros::lcd::set_text(1, "Test Bot: Verson 0.1");
+	pros::lcd::set_text(1, "Test Bot: Verson 1.0");
 
 	pros::lcd::register_btn1_cb(on_center_button);
 }
