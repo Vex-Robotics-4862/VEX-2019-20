@@ -1,4 +1,5 @@
 #include "main.h"
+#include "math.h"
 #define MOTOR_LEFT_BACK 2
 #define MOTOR_LEFT_FRONT 1
 #define MOTOR_RIGHT_FRONT 3
@@ -120,10 +121,10 @@ void opcontrol() {
 				moveRight(right_back, right_front, controller.get_analog(ANALOG_RIGHT_Y));
 				break;
 			case left_only:
-				mag = hypot(controller.get_analog(ANALOG_LEFT_X), controller.get_analog(ANALOG_LEFT_Y));
-				dir = atan(controller.get_analog(ANALOG_LEFT_Y)/controller.get_analog(ANALOG_LEFT_X));
-				moveLeft(left_back, left_front, mag * cos(dir));
-				moveRight(right_back, right_front, mag * sin(dir));
+				mag = hypot(controller.get_analog(ANALOG_LEFT_X), controller.get_analog(ANALOG_LEFT_Y)) / 2;
+				dir = atan2((double)controller.get_analog(ANALOG_LEFT_Y), (double)controller.get_analog(ANALOG_LEFT_X));
+				moveLeft(left_back, left_front, round(mag * cos(dir)));
+				moveRight(right_back, right_front, round(mag * sin(dir)));
 				//Using trigonometric ratios gives us at most -sqrt(2) against +sqrt(2)
 				//So, turning could be made more powerful than this
 				break;
