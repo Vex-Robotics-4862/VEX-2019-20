@@ -125,7 +125,7 @@ void opcontrol() {
 				moveRight(right_back, right_front, controller.get_analog(ANALOG_RIGHT_Y));
 				break;
 			case left_only:
-				mag = hypot(controller.get_analog(ANALOG_LEFT_X), controller.get_analog(ANALOG_LEFT_Y));
+				mag = hypot(controller.get_analog(ANALOG_LEFT_X), controller.get_analog(ANALOG_LEFT_Y)) * 4/3;
 				dir = atan2((double)controller.get_analog(ANALOG_LEFT_Y), (double)controller.get_analog(ANALOG_LEFT_X));
 				moveLeft(left_back, left_front, round(mag * cos(dir - 0.785))); //1.75 = pi/2
 				moveRight(right_back, right_front, round(mag * sin(dir - 0.785)));
@@ -133,7 +133,7 @@ void opcontrol() {
 				//So, turning could be made more powerful than this
 				break;
 			case right_only:
-				mag = hypot(controller.get_analog(ANALOG_RIGHT_X), controller.get_analog(ANALOG_RIGHT_Y));
+				mag = hypot(controller.get_analog(ANALOG_RIGHT_X), controller.get_analog(ANALOG_RIGHT_Y)) * 4/3;
 				dir = atan2((double)controller.get_analog(ANALOG_RIGHT_Y), (double)controller.get_analog(ANALOG_RIGHT_X));
 				moveLeft(left_back, left_front, round(mag * cos(dir - 0.785))); //1.75 = pi/2
 				moveRight(right_back, right_front, round(mag * sin(dir - 0.785)));
