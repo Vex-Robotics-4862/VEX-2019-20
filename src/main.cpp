@@ -1,4 +1,5 @@
 #include "main.h"
+#include "okapi/api.hpp"
 #include "math.h"
 #define MOTOR_LEFT_BACK 2
 #define MOTOR_LEFT_FRONT 1
@@ -6,6 +7,8 @@
 #define MOTOR_RIGHT_BACK 4
 #define MOTOR_TRAY 5
 #define MOTOR_LIFT 6
+
+
 
 /**
  * A callback function for LLEMU's center button.
@@ -68,20 +71,21 @@ void competition_initialize() {}
  void moveLeft(pros::Motor lb, pros::Motor lf, int velocity) {
 	lb.move(-velocity);
 	lf.move(-velocity);
+	pros::lcd::set_text(2, std::to_string(velocity));
  }
  void moveRight(pros::Motor rb, pros::Motor rf, int velocity) {
 	rb.move(velocity);
 	rf.move(velocity);
+	pros::lcd::set_text(3, std::to_string(velocity));
  }
+using namespace okapi;
+auto chassis = ChassisControllerFactory::create(MOTOR_LEFT_FRONT, MOTOR_RIGHT_FRONT);
 void autonomous() {
 	pros::Motor left_back (MOTOR_LEFT_BACK);
 	pros::Motor left_front (MOTOR_LEFT_FRONT);
 	pros::Motor right_back (MOTOR_RIGHT_BACK);
 	pros::Motor right_front (MOTOR_RIGHT_FRONT);
 	pros::Motor tray (MOTOR_TRAY);
-
-
-
 
 
 }
@@ -111,7 +115,7 @@ void opcontrol() {
 
 
 	enum driveType { tank, right_only, left_only };
-	driveType drive = left_only;
+	driveType drive = right_only;
 	double mag = 0.0; //magnitude, 0.0 to 1.0
 	double dir = 0.0; //direction, 0 to 2pi
 	while (true) {
@@ -121,23 +125,29 @@ void opcontrol() {
 				moveRight(right_back, right_front, controller.get_analog(ANALOG_RIGHT_Y));
 				break;
 			case left_only:
-				mag = hypot(controller.get_analog(ANALOG_LEFT_X), controller.get_analog(ANALOG_LEFT_Y)) / 2;
+				mag = hypot(controller.get_analog(ANALOG_LEFT_X), controller.get_analog(ANALOG_LEFT_Y));
 				dir = atan2((double)controller.get_analog(ANALOG_LEFT_Y), (double)controller.get_analog(ANALOG_LEFT_X));
-				moveLeft(left_back, left_front, round(mag * cos(dir)));
-				moveRight(right_back, right_front, round(mag * sin(dir)));
+				moveLeft(left_back, left_front, round(mag * cos(dir - 0.785))); //1.75 = pi/2
+				moveRight(right_back, right_front, round(mag * sin(dir - 0.785)));
 				//Using trigonometric ratios gives us at most -sqrt(2) against +sqrt(2)
 				//So, turning could be made more powerful than this
 				break;
 			case right_only:
 				mag = hypot(controller.get_analog(ANALOG_RIGHT_X), controller.get_analog(ANALOG_RIGHT_Y));
-				dir = atan(controller.get_analog(ANALOG_RIGHT_Y)/controller.get_analog(ANALOG_RIGHT_X));
-				moveLeft(left_back, left_front, mag * cos(dir));
-				moveRight(right_back, right_front, mag * sin(dir));
+				dir = atan2((double)controller.get_analog(ANALOG_RIGHT_Y), (double)controller.get_analog(ANALOG_RIGHT_X));
+				moveLeft(left_back, left_front, round(mag * cos(dir - 0.785))); //1.75 = pi/2
+				moveRight(right_back, right_front, round(mag * sin(dir - 0.785)));
+
+				//Using trigonometric ratios gives us at most -sqrt(2) against +sqrt(2)
+				//So, turning could be made more powerful than this
 				break;
 		}
 
 		if (controller.get_digital(DIGITAL_A)) {
 			drive = tank;
+		}
+		if (controller.get_digital(DIGITAL_B)) {
+			drive = right_only;
 		}
 		if (controller.get_digital(DIGITAL_R1)) {
 			tray.move(96); //At 32/128 = 25% power...?
