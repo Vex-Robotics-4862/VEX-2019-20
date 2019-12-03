@@ -154,8 +154,10 @@ void opcontrol() {
 		}
 		if (controller.get_digital(DIGITAL_R1)) {
 			intakeL.move(128); //FULL POWER
-		} else if (controller.get_digital(DIGITAL_R2)) {
 			intakeR.move(-128);
+		} else if (controller.get_digital(DIGITAL_R2)) {
+			intakeL.move(-128);
+			intakeR.move(128);
 		} else {
 			intakeL.move(0);
 			intakeR.move(0);
