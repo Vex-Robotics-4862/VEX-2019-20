@@ -159,7 +159,7 @@ void opcontrol() {
 				//Use use left/right :OR: buttons
 				break;
 			default:
-
+				lift = controller.get_analog(ANALOG_LEFT_Y);
 				break;
 		}
 		//INTAKE
