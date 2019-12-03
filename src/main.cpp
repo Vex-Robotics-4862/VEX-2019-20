@@ -66,11 +66,11 @@ void competition_initialize() {}
  */
  void moveLeft(pros::Motor l, int velocity) {
 	l.move(velocity);
-	pros::lcd::set_text(2, std::to_string(velocity));
+	pros::lcd::set_text(2, "LD: " + std::to_string(velocity));
  }
  void moveRight(pros::Motor r, int velocity) {
 	r.move(-velocity);
-	pros::lcd::set_text(3, std::to_string(velocity));
+	pros::lcd::set_text(3, "RD: " + std::to_string(velocity));
  }
 using namespace okapi;
 auto chassis = ChassisControllerFactory::create(MOTOR_LEFT_FRONT, MOTOR_RIGHT_FRONT);
@@ -160,6 +160,7 @@ void opcontrol() {
 				break;
 			default:
 				lift = controller.get_analog(ANALOG_LEFT_Y);
+				pros::lcd::set_text(5, "LIFT: " + std::to_string(controller.get_analog(ANALOG_LEFT_Y)));
 				break;
 		}
 		//INTAKE
