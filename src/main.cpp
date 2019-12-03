@@ -32,7 +32,7 @@ void initialize() {
 	pros::lcd::initialize();
 	pros::lcd::set_text(1, "Test Bot: Verson 1.2");
 
-	pros::lcd::register_btn1_cb(on_center_button);
+
 }
 
 /**
