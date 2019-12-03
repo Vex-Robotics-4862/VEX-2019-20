@@ -12,6 +12,7 @@
 
 
 
+
 /**
  * A callback function for LLEMU's center button.
  *
@@ -30,6 +31,9 @@ void on_center_button() {
  */
 void initialize() {
 	pros::lcd::initialize();
+	pros::Motor tray_initializer (MOTOR_TRAY, pros::E_MOTOR_GEARSET_18, false, pros::E_MOTOR_ENCODER_DEGREES);
+
+
 	pros::lcd::set_text(1, "Test Bot: Verson 1.2");
 
 
