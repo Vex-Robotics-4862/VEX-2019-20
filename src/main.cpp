@@ -65,11 +65,11 @@ void competition_initialize() {}
  * from where it left off.
  */
  void moveLeft(pros::Motor l, int velocity) {
-	l.move(-velocity);
+	l.move(velocity);
 	pros::lcd::set_text(2, std::to_string(velocity));
  }
  void moveRight(pros::Motor r, int velocity) {
-	r.move(velocity);
+	r.move(-velocity);
 	pros::lcd::set_text(3, std::to_string(velocity));
  }
 using namespace okapi;
@@ -103,8 +103,9 @@ void opcontrol() {
 	pros::Motor right (MOTOR_RIGHT_BACK, MOTOR_RIGHT_FRONT);
 	pros::Motor tray (MOTOR_TRAY);
 	pros::Motor lift (MOTOR_LIFT);
-	pros::Motor intake (INTAKE_RIGHT, INTAKE_LEFT);
-
+	pros::Motor intakeL (INTAKE_LEFT);
+	pros::Motor intakeR (INTAKE_RIGHT);
+	//pros::Motor intake0 (INTAKE_LEFT, INTAKE_RIGHT); Example of what not to do
 
 	pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
@@ -145,18 +146,19 @@ void opcontrol() {
 			drive = right_only;
 		}
 		if (controller.get_digital(DIGITAL_L1)) {
-			tray.move(96); //At 32/128 = 25% power...?
+			tray.move(96); //75% power...?
 		} else if (controller.get_digital(DIGITAL_L2)) {
 			tray.move(-96);
 		} else {
 			tray.move(0);
 		}
 		if (controller.get_digital(DIGITAL_R1)) {
-			tray.move(96); //At 32/128 = 25% power...?
+			intakeL.move(128); //FULL POWER
 		} else if (controller.get_digital(DIGITAL_R2)) {
-			tray.move(-96);
+			intakeR.move(-128);
 		} else {
-			tray.move(0);
+			intakeL.move(0);
+			intakeR.move(0);
 		}
 
 		pros::delay(20);
