@@ -7,6 +7,8 @@
 #define MOTOR_RIGHT_BACK 4
 #define MOTOR_TRAY 5
 #define MOTOR_LIFT 6
+#define INTAKE_LEFT 20
+#define INTAKE_RIGHT 19
 
 
 
@@ -28,7 +30,7 @@ void on_center_button() {
  */
 void initialize() {
 	pros::lcd::initialize();
-	pros::lcd::set_text(1, "Test Bot: Verson 1.0");
+	pros::lcd::set_text(1, "Test Bot: Verson 1.1");
 
 	pros::lcd::register_btn1_cb(on_center_button);
 }
@@ -104,6 +106,7 @@ void opcontrol() {
 	pros::Motor right_back (MOTOR_RIGHT_BACK);
   pros::Motor right_front (MOTOR_RIGHT_FRONT);
 	pros::Motor tray (MOTOR_TRAY);
+	pros::Motor lift (MOTOR_LIFT);
 
 	pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
@@ -143,9 +146,9 @@ void opcontrol() {
 		if (controller.get_digital(DIGITAL_B)) {
 			drive = right_only;
 		}
-		if (controller.get_digital(DIGITAL_R1)) {
+		if (controller.get_digital(DIGITAL_L1)) {
 			tray.move(96); //At 32/128 = 25% power...?
-		} else if (controller.get_digital(DIGITAL_R2)) {
+		} else if (controller.get_digital(DIGITAL_L2)) {
 			tray.move(-96);
 		} else {
 			tray.move(0);
