@@ -115,6 +115,7 @@ void opcontrol() {
 	double mag = 0.0; //magnitude, 0.0 to 1.0
 	double dir = 0.0; //direction, 0 to 2pi
 	while (true) {
+		//DRIVE
 		switch (drive) {
 			case tank:
 				moveLeft(left, controller.get_analog(ANALOG_LEFT_Y));
@@ -138,24 +139,34 @@ void opcontrol() {
 				//So, turning could be made more powerful than this
 				break;
 		}
-
 		if (controller.get_digital(DIGITAL_A)) {
 			drive = tank;
 		}
 		if (controller.get_digital(DIGITAL_B)) {
 			drive = right_only;
 		}
-		if (controller.get_digital(DIGITAL_L1)) {
+		//TRAY
+		if (controller.get_digital(DIGITAL_R1)) {
 			tray.move(96); //75% power...?
-		} else if (controller.get_digital(DIGITAL_L2)) {
+		} else if (controller.get_digital(DIGITAL_R2)) {
 			tray.move(-96);
 		} else {
 			tray.move(0);
 		}
-		if (controller.get_digital(DIGITAL_R1)) {
+		//LIFT
+		switch (drive) {
+			case tank:
+				//Use use left/right :OR: buttons
+				break;
+			default:
+
+				break;
+		}
+		//INTAKE
+		if (controller.get_digital(DIGITAL_L1)) {
 			intakeL.move(128); //FULL POWER
 			intakeR.move(-128);
-		} else if (controller.get_digital(DIGITAL_R2)) {
+		} else if (controller.get_digital(DIGITAL_L2)) {
 			intakeL.move(-128);
 			intakeR.move(128);
 		} else {
