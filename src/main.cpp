@@ -105,7 +105,7 @@ void autonomous() {
 void opcontrol() {
 	pros::Motor left (MOTOR_LEFT_BACK, MOTOR_LEFT_FRONT);
 	pros::Motor right (MOTOR_RIGHT_BACK, MOTOR_RIGHT_FRONT);
-	pros::Motor tray (MOTOR_TRAY);
+	pros::Motor tray (MOTOR_TRAY); //Uses initialization above; 100 RPM
 	pros::Motor lift (MOTOR_LIFT);
 	pros::Motor intakeL (INTAKE_LEFT);
 	pros::Motor intakeR (INTAKE_RIGHT);
@@ -157,7 +157,7 @@ void opcontrol() {
 		} else {
 			tray.move(0);
 		}
-		//LIFT
+		/* OLD LIFT CODE
 		switch (drive) {
 			case tank:
 				//Use use left/right :OR: buttons
@@ -166,7 +166,10 @@ void opcontrol() {
 				lift = controller.get_analog(ANALOG_LEFT_Y);
 				pros::lcd::set_text(5, "LIFT: " + std::to_string(controller.get_analog(ANALOG_LEFT_Y)));
 				break;
-		}
+		} */
+		lift.move_absolute(controller.get_analog(ANALOG_LEFT_Y) * 2, 127);
+		//Move to position from left joystick at max speed 127
+
 		//INTAKE
 		if (controller.get_digital(DIGITAL_L1)) {
 			intakeL.move(128); //FULL POWER
