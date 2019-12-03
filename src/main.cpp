@@ -64,14 +64,12 @@ void competition_initialize() {}
  * will be stopped. Re-enabling the robot will restart the task, not re-start it
  * from where it left off.
  */
- void moveLeft(pros::Motor lb, pros::Motor lf, int velocity) {
-	lb.move(-velocity);
-	lf.move(-velocity);
+ void moveLeft(pros::Motor l, int velocity) {
+	l.move(-velocity);
 	pros::lcd::set_text(2, std::to_string(velocity));
  }
- void moveRight(pros::Motor rb, pros::Motor rf, int velocity) {
-	rb.move(velocity);
-	rf.move(velocity);
+ void moveRight(pros::Motor r, int velocity) {
+	r.move(velocity);
 	pros::lcd::set_text(3, std::to_string(velocity));
  }
 using namespace okapi;
@@ -101,12 +99,12 @@ void autonomous() {
  */
 
 void opcontrol() {
-	pros::Motor left_back (MOTOR_LEFT_BACK);
-  pros::Motor left_front (MOTOR_LEFT_FRONT);
-	pros::Motor right_back (MOTOR_RIGHT_BACK);
-  pros::Motor right_front (MOTOR_RIGHT_FRONT);
+	pros::Motor left (MOTOR_LEFT_BACK, MOTOR_LEFT_FRONT);
+	pros::Motor right (MOTOR_RIGHT_BACK, MOTOR_RIGHT_FRONT);
 	pros::Motor tray (MOTOR_TRAY);
 	pros::Motor lift (MOTOR_LIFT);
+	pros::Motor intake (INTAKE_RIGHT, INTAKE_LEFT);
+
 
 	pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
@@ -153,7 +151,13 @@ void opcontrol() {
 		} else {
 			tray.move(0);
 		}
-
+		if (controller.get_digital(DIGITAL_R1)) {
+			tray.move(96); //At 32/128 = 25% power...?
+		} else if (controller.get_digital(DIGITAL_R2)) {
+			tray.move(-96);
+		} else {
+			tray.move(0);
+		}
 
 		pros::delay(20);
 	}
