@@ -148,7 +148,7 @@ void opcontrol() {
 				break;
 		}
 		if (controller.get_digital(DIGITAL_A)) {
-			drive = tank;
+			//drive = tank;
 		}
 		if (controller.get_digital(DIGITAL_B)) {
 			drive = right_only;
