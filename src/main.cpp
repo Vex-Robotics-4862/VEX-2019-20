@@ -76,20 +76,20 @@ void competition_initialize() {}
 	pros::lcd::set_text(3, "RD: " + std::to_string(velocity));
  }
 using namespace okapi;
-auto chassis = ChassisControllerFactory::create(MOTOR_LEFT_FRONT, MOTOR_RIGHT_FRONT);
+auto chassis = ChassisControllerFactory::create({MOTOR_LEFT_FRONT, MOTOR_LEFT_BACK}, {MOTOR_RIGHT_FRONT, MOTOR_RIGHT_BACK});
 void autonomous() {
 	//pros::Motor left_back (MOTOR_LEFT_BACK);
 	//pros::Motor left_front (MOTOR_LEFT_FRONT);
 	//pros::Motor right_back (MOTOR_RIGHT_BACK);
 	//pros::Motor right_front (MOTOR_RIGHT_FRONT);
 	pros::Motor tray (MOTOR_TRAY);
-	chassis.moveDistance(1.0);
+	chassis.moveDistance(-1.0); //negative is FORWARDS
 	chassis.turnAngle(90.0);
-	chassis.moveDistance(1.0);
+	chassis.moveDistance(-1.0);
 	chassis.turnAngle(90.0);
-	chassis.moveDistance(1.0);
+	chassis.moveDistance(-1.0);
 	chassis.turnAngle(90.0);
-	chassis.moveDistance(1.0);
+	chassis.moveDistance(-1.0);
 	chassis.turnAngle(90.0);
 }
 
@@ -126,6 +126,7 @@ void opcontrol() {
 	double dir = 0.0; //direction, 0 to 2pi
 	double liftMovement = 120.0;
 	double liftDiff = 0.0;
+	bool liftEnabled = false;
 	while (true) {
 		//DRIVE
 		switch (drive) {
@@ -155,7 +156,9 @@ void opcontrol() {
 		}
 		//TRAY
 		if (controller.get_digital(DIGITAL_R1)) {
-			tray.move(64); //50% power...?
+			if (true/*tray.get_position()<1000.0*/) {
+				tray.move(64);
+			}; //50% power...?
 		} else if (controller.get_digital(DIGITAL_R2)) {
 			tray.move(-64);
 		} else {
@@ -167,15 +170,27 @@ void opcontrol() {
 				//Use use left/right :OR: buttons
 		//		break;
 		//	default:
-				liftMovement = liftMovement + controller.get_analog(ANALOG_LEFT_Y);
+
 				pros::lcd::set_text(4, std::to_string(tray.get_position()));
-				pros::lcd::set_text(5, std::to_string(liftMovement));
-				if (controller.get_analog(ANALOG_LEFT_Y)>20 && tray.get_position()<2800.0) {
-					tray.move(controller.get_analog(ANALOG_LEFT_Y)*1.8);}
-				if (liftMovement > 1800.0) { //maxLiftMovement
-					liftMovement = 1800.0;
-				} else if (liftMovement < 100.0) { //minLiftMovement
-					liftMovement = 100.0;
+				pros::lcd::set_text(5, std::to_string(lift.get_voltage()));
+				pros::lcd::set_text(6, std::to_string(liftMovement));
+
+				if (liftEnabled) {
+					liftMovement = liftMovement + controller.get_analog(ANALOG_LEFT_Y);
+					if (controller.get_analog(ANALOG_LEFT_Y)>20 && tray.get_position()<500.0) {
+						tray.move(controller.get_analog(ANALOG_LEFT_Y)*1.8);}
+						if (liftMovement > 1800.0) { //maxLiftMovement
+							liftMovement = 1800.0;
+						} else if (liftMovement < 100.0) { //minLiftMovement
+							liftMovement = 100.0;
+							liftEnabled = false;
+							lift.move(0);
+					}
+				} else {
+					if (controller.get_analog(ANALOG_LEFT_Y) > 32) {
+						liftEnabled = true;
+						liftMovement = 110.0;
+					}
 				}
 				//pros::lcd::set_text(5, "LIFT: " + std::to_string(liftMovement));
 				if (abs(liftMovement - liftDiff)> 100.0) {
@@ -185,8 +200,8 @@ void opcontrol() {
 			}
 
 			if (controller.get_digital((DIGITAL_UP))) {
-				lift.move_absolute(1800, 64);
-				if (tray.get_position()<2800.0) {
+				//lift.move_absolute(1800, 64);
+				if (tray.get_position()<1000.0) {
 					tray.move(64);
 				}
 			}
@@ -205,9 +220,12 @@ void opcontrol() {
 			intakeL.move(0);
 			intakeR.move(0);
 		}
-		if (controller.get_analog(ANALOG_LEFT_X) > 32) {
-			intakeL.move(controller.get_analog(ANALOG_LEFT_X) - 16);
-			intakeR.move(-controller.get_analog(ANALOG_LEFT_X) + 16);
+		if (controller.get_analog(ANALOG_LEFT_X) > 16) {
+			intakeL.move(controller.get_analog(ANALOG_LEFT_X)/4);
+			intakeR.move(-controller.get_analog(ANALOG_LEFT_X)/4);
+		} else if (controller.get_analog(ANALOG_LEFT_X) < -16) {
+			intakeL.move(controller.get_analog(ANALOG_LEFT_X)/4);
+			intakeR.move(-controller.get_analog(ANALOG_LEFT_X)/4);
 		}
 
 
