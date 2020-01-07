@@ -34,7 +34,7 @@ void initialize() {
 	pros::Motor tray_initializer (MOTOR_TRAY, pros::E_MOTOR_GEARSET_36, false, pros::E_MOTOR_ENCODER_DEGREES);
 
 
-	pros::lcd::set_text(1, "Test Bot: Verson 1.2");
+	pros::lcd::set_text(1, "Test Bot: Verson 1.3");
 
 
 }
@@ -118,6 +118,8 @@ void opcontrol() {
 	driveType drive = right_only;
 	double mag = 0.0; //magnitude, 0.0 to 1.0
 	double dir = 0.0; //direction, 0 to 2pi
+	double liftMovement = 120.0;
+	double liftDiff = 0.0;
 	while (true) {
 		//DRIVE
 		switch (drive) {
@@ -130,8 +132,6 @@ void opcontrol() {
 				dir = atan2((double)controller.get_analog(ANALOG_LEFT_Y), (double)controller.get_analog(ANALOG_LEFT_X));
 				moveLeft(left, round(mag * cos(dir - 0.785))); //1.75 = pi/2
 				moveRight(right, round(mag * sin(dir - 0.785)));
-				//Using trigonometric ratios gives us at most -sqrt(2) against +sqrt(2)
-				//So, turning could be made more powerful than this
 				break;
 			case right_only:
 				mag = hypot(controller.get_analog(ANALOG_RIGHT_X), controller.get_analog(ANALOG_RIGHT_Y)) * 4/3;
@@ -139,8 +139,6 @@ void opcontrol() {
 				moveLeft(left, round(mag * cos(dir - 0.785))); //1.75 = pi/2
 				moveRight(right, round(mag * sin(dir - 0.785)));
 
-				//Using trigonometric ratios gives us at most -sqrt(2) against +sqrt(2)
-				//So, turning could be made more powerful than this
 				break;
 		}
 		if (controller.get_digital(DIGITAL_A)) {
@@ -151,23 +149,34 @@ void opcontrol() {
 		}
 		//TRAY
 		if (controller.get_digital(DIGITAL_R1)) {
-			tray.move(96); //75% power...?
+			tray.move(64); //50% power...?
 		} else if (controller.get_digital(DIGITAL_R2)) {
-			tray.move(-96);
+			tray.move(-64);
 		} else {
 			tray.move(0);
 		}
-		/* OLD LIFT CODE
-		switch (drive) {
-			case tank:
+
+		//switch (drive) {
+		//	case tank:
 				//Use use left/right :OR: buttons
-				break;
-			default:
-				lift = controller.get_analog(ANALOG_LEFT_Y);
-				pros::lcd::set_text(5, "LIFT: " + std::to_string(controller.get_analog(ANALOG_LEFT_Y)));
-				break;
-		} */
-		lift.move_absolute(controller.get_analog(ANALOG_LEFT_Y) * 2, 127);
+		//		break;
+		//	default:
+				liftMovement = liftMovement + controller.get_analog(ANALOG_LEFT_Y);
+				tray.move(controller.get_analog(ANALOG_LEFT_Y));
+				if (liftMovement > 1800.0) { //maxLiftMovement
+					liftMovement = 1800.0;
+				} else if (liftMovement < 200.0) { //minLiftMovement
+					liftMovement = 200.0;
+				}
+				//pros::lcd::set_text(5, "LIFT: " + std::to_string(liftMovement));
+				if (abs(liftMovement - liftDiff)> 100.0) {
+				lift.move_absolute(liftMovement, 64); //max set at 50% power
+				liftDiff = liftMovement;
+
+			} //TODO move tray with lift
+
+		//		break;
+		//}
 		//Move to position from left joystick at max speed 127
 
 		//INTAKE
@@ -182,7 +191,7 @@ void opcontrol() {
 			intakeR.move(0);
 		}
 
-		pros::delay(20);
+		pros::delay(40);
 	}
 
 
