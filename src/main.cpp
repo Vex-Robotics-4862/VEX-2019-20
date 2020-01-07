@@ -12,7 +12,6 @@
 
 
 
-
 /**
  * A callback function for LLEMU's center button.
  *
@@ -79,13 +78,19 @@ void competition_initialize() {}
 using namespace okapi;
 auto chassis = ChassisControllerFactory::create(MOTOR_LEFT_FRONT, MOTOR_RIGHT_FRONT);
 void autonomous() {
-	pros::Motor left_back (MOTOR_LEFT_BACK);
-	pros::Motor left_front (MOTOR_LEFT_FRONT);
-	pros::Motor right_back (MOTOR_RIGHT_BACK);
-	pros::Motor right_front (MOTOR_RIGHT_FRONT);
+	//pros::Motor left_back (MOTOR_LEFT_BACK);
+	//pros::Motor left_front (MOTOR_LEFT_FRONT);
+	//pros::Motor right_back (MOTOR_RIGHT_BACK);
+	//pros::Motor right_front (MOTOR_RIGHT_FRONT);
 	pros::Motor tray (MOTOR_TRAY);
-
-
+	chassis.moveDistance(1.0);
+	chassis.turnAngle(90.0);
+	chassis.moveDistance(1.0);
+	chassis.turnAngle(90.0);
+	chassis.moveDistance(1.0);
+	chassis.turnAngle(90.0);
+	chassis.moveDistance(1.0);
+	chassis.turnAngle(90.0);
 }
 
 /**
@@ -101,6 +106,7 @@ void autonomous() {
  * operator control task will be stopped. Re-enabling the robot will restart the
  * task, not resume it from where it left off.
  */
+
 
 void opcontrol() {
 	pros::Motor left (MOTOR_LEFT_BACK, MOTOR_LEFT_FRONT);
@@ -162,19 +168,28 @@ void opcontrol() {
 		//		break;
 		//	default:
 				liftMovement = liftMovement + controller.get_analog(ANALOG_LEFT_Y);
-				tray.move(controller.get_analog(ANALOG_LEFT_Y));
+				pros::lcd::set_text(4, std::to_string(tray.get_position()));
+				pros::lcd::set_text(5, std::to_string(liftMovement));
+				if (controller.get_analog(ANALOG_LEFT_Y)>20 && tray.get_position()<2800.0) {
+					tray.move(controller.get_analog(ANALOG_LEFT_Y)*1.8);}
 				if (liftMovement > 1800.0) { //maxLiftMovement
 					liftMovement = 1800.0;
-				} else if (liftMovement < 200.0) { //minLiftMovement
-					liftMovement = 200.0;
+				} else if (liftMovement < 100.0) { //minLiftMovement
+					liftMovement = 100.0;
 				}
 				//pros::lcd::set_text(5, "LIFT: " + std::to_string(liftMovement));
 				if (abs(liftMovement - liftDiff)> 100.0) {
 				lift.move_absolute(liftMovement, 64); //max set at 50% power
 				liftDiff = liftMovement;
 
-			} //TODO move tray with lift
+			}
 
+			if (controller.get_digital((DIGITAL_UP))) {
+				lift.move_absolute(1800, 64);
+				if (tray.get_position()<2800.0) {
+					tray.move(64);
+				}
+			}
 		//		break;
 		//}
 		//Move to position from left joystick at max speed 127
@@ -190,6 +205,12 @@ void opcontrol() {
 			intakeL.move(0);
 			intakeR.move(0);
 		}
+		if (controller.get_analog(ANALOG_LEFT_X) > 32) {
+			intakeL.move(controller.get_analog(ANALOG_LEFT_X) - 16);
+			intakeR.move(-controller.get_analog(ANALOG_LEFT_X) + 16);
+		}
+
+
 
 		pros::delay(40);
 	}
