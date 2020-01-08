@@ -83,14 +83,22 @@ void autonomous() {
 	//pros::Motor right_back (MOTOR_RIGHT_BACK);
 	//pros::Motor right_front (MOTOR_RIGHT_FRONT);
 	pros::Motor tray (MOTOR_TRAY);
-	chassis.moveDistance(-1.0); //negative is FORWARDS
+	chassis.moveDistance(5.0); //positive is FORWARDS
+	chassis.waitUntilSettled();
 	chassis.turnAngle(90.0);
-	chassis.moveDistance(-1.0);
+	chassis.waitUntilSettled();
+	chassis.moveDistance(1.0);
+	chassis.waitUntilSettled();
 	chassis.turnAngle(90.0);
-	chassis.moveDistance(-1.0);
+	chassis.waitUntilSettled();
+	chassis.moveDistance(-2.0);
+	chassis.waitUntilSettled();
 	chassis.turnAngle(90.0);
-	chassis.moveDistance(-1.0);
+	chassis.waitUntilSettled();
+	chassis.moveDistance(1.0);
+	chassis.waitUntilSettled();
 	chassis.turnAngle(90.0);
+	chassis.waitUntilSettled();
 }
 
 /**
@@ -135,13 +143,13 @@ void opcontrol() {
 				moveRight(right, controller.get_analog(ANALOG_RIGHT_Y));
 				break;
 			case left_only:
-				mag = hypot(controller.get_analog(ANALOG_LEFT_X), controller.get_analog(ANALOG_LEFT_Y)) * 4/3;
+				mag = hypot(controller.get_analog(ANALOG_LEFT_X), controller.get_analog(ANALOG_LEFT_Y)) * 5/3;
 				dir = atan2((double)controller.get_analog(ANALOG_LEFT_Y), (double)controller.get_analog(ANALOG_LEFT_X));
 				moveLeft(left, round(mag * cos(dir - 0.785))); //1.75 = pi/2
 				moveRight(right, round(mag * sin(dir - 0.785)));
 				break;
 			case right_only:
-				mag = hypot(controller.get_analog(ANALOG_RIGHT_X), controller.get_analog(ANALOG_RIGHT_Y)) * 4/3;
+				mag = hypot(controller.get_analog(ANALOG_RIGHT_X), controller.get_analog(ANALOG_RIGHT_Y)) * 5/3;
 				dir = atan2((double)controller.get_analog(ANALOG_RIGHT_Y), (double)controller.get_analog(ANALOG_RIGHT_X));
 				moveLeft(left, round(mag * cos(dir - 0.785))); //1.75 = pi/2
 				moveRight(right, round(mag * sin(dir - 0.785)));
