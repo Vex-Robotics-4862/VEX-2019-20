@@ -72,7 +72,7 @@ void competition_initialize() {}
 	pros::lcd::set_text(2, "LD: " + std::to_string(velocity));
  }
  void moveRight(pros::Motor r, int velocity) {
-	r.move(velocity);
+	r.move(-velocity);
 	pros::lcd::set_text(3, "RD: " + std::to_string(velocity));
  }
 using namespace okapi;
@@ -80,14 +80,15 @@ auto chassis = ChassisControllerFactory::create(MOTOR_LEFT_FRONT, MOTOR_RIGHT_FR
 void autonomous() {
 	//Turning is moving, moving is turning.
 	pros::Motor leftB (MOTOR_LEFT_BACK);
-	pros::Motor rightB (MOTOR_RIGHT_BACK, true);
-	pros::Motor leftF (MOTOR_LEFT_FRONT, true);
+	pros::Motor rightB (MOTOR_RIGHT_BACK);
+	pros::Motor leftF (MOTOR_LEFT_FRONT);
 	pros::Motor rightF (MOTOR_RIGHT_FRONT);
 	pros::Motor tray (MOTOR_TRAY);
 	pros::Motor intakeL (INTAKE_LEFT);
 	pros::Motor intakeR (INTAKE_RIGHT);
 	chassis.waitUntilSettled();
-	chassis.turnAngle(1000); //negative is forwards
+	chassis.turnAngle(-850); //negative is forwards; -910 is barely too far
+	//260 is 1 tile at low battery
 	chassis.waitUntilSettled();
 	intakeL.move(-128); //FULL POWER
 	intakeR.move(128);
@@ -123,9 +124,9 @@ void opcontrol() {
 	pros::Motor left (MOTOR_LEFT_BACK, MOTOR_LEFT_FRONT);
 	pros::Motor right (MOTOR_RIGHT_BACK, MOTOR_RIGHT_FRONT);
 	pros::Motor leftB (MOTOR_LEFT_BACK);
-	pros::Motor rightB (MOTOR_RIGHT_BACK, true);
+	pros::Motor rightB (MOTOR_RIGHT_BACK);
 	pros::Motor leftF (MOTOR_LEFT_FRONT, true);
-	pros::Motor rightF (MOTOR_RIGHT_FRONT);
+	pros::Motor rightF (MOTOR_RIGHT_FRONT, true);
 
 	pros::Motor tray (MOTOR_TRAY); //Uses initialization above; 100 RPM
 	pros::Motor lift (MOTOR_LIFT);
@@ -143,6 +144,7 @@ void opcontrol() {
 	double liftMovement = 120.0;
 	double liftDiff = 0.0;
 	bool liftEnabled = false;
+
 	while (true) {
 		//DRIVE
 		switch (drive) {
@@ -191,7 +193,7 @@ void opcontrol() {
 				pros::lcd::set_text(4, std::to_string(tray.get_position()));
 				pros::lcd::set_text(5, std::to_string(lift.get_voltage()));
 				pros::lcd::set_text(6, std::to_string(liftMovement));
-
+				pros::lcd::set_text(7, std::to_string(leftB.get_position()));
 				if (liftEnabled) {
 					liftMovement = liftMovement + controller.get_analog(ANALOG_LEFT_Y);
 					if (controller.get_analog(ANALOG_LEFT_Y)>20 && tray.get_position()<500.0) {
