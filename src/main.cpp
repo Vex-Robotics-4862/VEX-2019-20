@@ -33,7 +33,7 @@ void initialize() {
 	pros::Motor tray_initializer (MOTOR_TRAY, pros::E_MOTOR_GEARSET_36, false, pros::E_MOTOR_ENCODER_DEGREES);
 
 
-	pros::lcd::set_text(1, "Test Bot: Verson 1.3");
+	pros::lcd::set_text(1, "Test Bot: Verson 1.4");
 
 
 }
@@ -72,33 +72,36 @@ void competition_initialize() {}
 	pros::lcd::set_text(2, "LD: " + std::to_string(velocity));
  }
  void moveRight(pros::Motor r, int velocity) {
-	r.move(-velocity);
+	r.move(velocity);
 	pros::lcd::set_text(3, "RD: " + std::to_string(velocity));
  }
 using namespace okapi;
-auto chassis = ChassisControllerFactory::create({MOTOR_LEFT_FRONT, MOTOR_LEFT_BACK}, {MOTOR_RIGHT_FRONT, MOTOR_RIGHT_BACK});
+auto chassis = ChassisControllerFactory::create(MOTOR_LEFT_FRONT, MOTOR_RIGHT_FRONT, MOTOR_LEFT_BACK, MOTOR_RIGHT_BACK);
 void autonomous() {
-	//pros::Motor left_back (MOTOR_LEFT_BACK);
-	//pros::Motor left_front (MOTOR_LEFT_FRONT);
-	//pros::Motor right_back (MOTOR_RIGHT_BACK);
-	//pros::Motor right_front (MOTOR_RIGHT_FRONT);
+	//Turning is moving, moving is turning.
+	pros::Motor leftB (MOTOR_LEFT_BACK);
+	pros::Motor rightB (MOTOR_RIGHT_BACK, true);
+	pros::Motor leftF (MOTOR_LEFT_FRONT, true);
+	pros::Motor rightF (MOTOR_RIGHT_FRONT);
 	pros::Motor tray (MOTOR_TRAY);
-	chassis.moveDistance(5.0); //positive is FORWARDS
+	pros::Motor intakeL (INTAKE_LEFT);
+	pros::Motor intakeR (INTAKE_RIGHT);
 	chassis.waitUntilSettled();
-	chassis.turnAngle(90.0);
+	chassis.turnAngle(-1000); //negative is forwards
 	chassis.waitUntilSettled();
-	chassis.moveDistance(1.0);
-	chassis.waitUntilSettled();
-	chassis.turnAngle(90.0);
-	chassis.waitUntilSettled();
-	chassis.moveDistance(-2.0);
-	chassis.waitUntilSettled();
-	chassis.turnAngle(90.0);
-	chassis.waitUntilSettled();
-	chassis.moveDistance(1.0);
-	chassis.waitUntilSettled();
-	chassis.turnAngle(90.0);
-	chassis.waitUntilSettled();
+	intakeL.move(-128); //FULL POWER
+	intakeR.move(128);
+	pros::delay(1000);
+	intakeL.move(0);
+	intakeR.move(0);
+	leftF.move(-64);
+	leftB.move(-64);
+	pros::delay(100);
+	leftF.move(0);
+	leftB.move(0);
+	chassis.turnAngle(250);
+	chassis.moveDistance(180); //rotate 180 degrees
+
 }
 
 /**
@@ -119,6 +122,11 @@ void autonomous() {
 void opcontrol() {
 	pros::Motor left (MOTOR_LEFT_BACK, MOTOR_LEFT_FRONT);
 	pros::Motor right (MOTOR_RIGHT_BACK, MOTOR_RIGHT_FRONT);
+	pros::Motor leftB (MOTOR_LEFT_BACK);
+	pros::Motor rightB (MOTOR_RIGHT_BACK, true);
+	pros::Motor leftF (MOTOR_LEFT_FRONT, true);
+	pros::Motor rightF (MOTOR_RIGHT_FRONT);
+
 	pros::Motor tray (MOTOR_TRAY); //Uses initialization above; 100 RPM
 	pros::Motor lift (MOTOR_LIFT);
 	pros::Motor intakeL (INTAKE_LEFT);
@@ -143,17 +151,18 @@ void opcontrol() {
 				moveRight(right, controller.get_analog(ANALOG_RIGHT_Y));
 				break;
 			case left_only:
-				mag = hypot(controller.get_analog(ANALOG_LEFT_X), controller.get_analog(ANALOG_LEFT_Y)) * 5/3;
+				/*mag = hypot(controller.get_analog(ANALOG_LEFT_X), controller.get_analog(ANALOG_LEFT_Y)) * 5/3;
 				dir = atan2((double)controller.get_analog(ANALOG_LEFT_Y), (double)controller.get_analog(ANALOG_LEFT_X));
 				moveLeft(left, round(mag * cos(dir - 0.785))); //1.75 = pi/2
-				moveRight(right, round(mag * sin(dir - 0.785)));
+				moveRight(right, round(mag * sin(dir - 0.785)));*/
 				break;
 			case right_only:
-				mag = hypot(controller.get_analog(ANALOG_RIGHT_X), controller.get_analog(ANALOG_RIGHT_Y)) * 5/3;
+				mag = hypot(controller.get_analog(ANALOG_RIGHT_X), controller.get_analog(ANALOG_RIGHT_Y)) * 4/3;
 				dir = atan2((double)controller.get_analog(ANALOG_RIGHT_Y), (double)controller.get_analog(ANALOG_RIGHT_X));
-				moveLeft(left, round(mag * cos(dir - 0.785))); //1.75 = pi/2
-				moveRight(right, round(mag * sin(dir - 0.785)));
-
+				moveLeft(leftB, round(mag * cos(dir - 0.785))); //1.75 = pi/2
+				moveRight(rightB, round(mag * sin(dir - 0.785)));
+				moveLeft(leftF, round(mag * cos(dir - 0.785)));
+				moveRight(rightF, round(mag * sin(dir - 0.785)));
 				break;
 		}
 		if (controller.get_digital(DIGITAL_A)) {
@@ -165,10 +174,10 @@ void opcontrol() {
 		//TRAY
 		if (controller.get_digital(DIGITAL_R1)) {
 			if (true/*tray.get_position()<1000.0*/) {
-				tray.move(64);
+				tray.move(96);
 			}; //50% power...?
 		} else if (controller.get_digital(DIGITAL_R2)) {
-			tray.move(-64);
+			tray.move(-96);
 		} else {
 			tray.move(0);
 		}
@@ -187,8 +196,8 @@ void opcontrol() {
 					liftMovement = liftMovement + controller.get_analog(ANALOG_LEFT_Y);
 					if (controller.get_analog(ANALOG_LEFT_Y)>20 && tray.get_position()<500.0) {
 						tray.move(controller.get_analog(ANALOG_LEFT_Y)*1.8);}
-						if (liftMovement > 1800.0) { //maxLiftMovement
-							liftMovement = 1800.0;
+						if (liftMovement > 2800.0) { //maxLiftMovement
+							liftMovement = 2800.0;
 						} else if (liftMovement < 100.0) { //minLiftMovement
 							liftMovement = 100.0;
 							liftEnabled = false;
