@@ -87,7 +87,7 @@ void autonomous() {
 	pros::Motor intakeL (INTAKE_LEFT);
 	pros::Motor intakeR (INTAKE_RIGHT);
 	chassis.waitUntilSettled();
-	chassis.turnAngle(-1000); //negative is forwards
+	chassis.turnAngle(1000); //negative is forwards
 	chassis.waitUntilSettled();
 	intakeL.move(-128); //FULL POWER
 	intakeR.move(128);
