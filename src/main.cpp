@@ -212,10 +212,10 @@ void opcontrol() {
 				pros::lcd::set_text(7, std::to_string(leftB.get_position()));
 				if (liftEnabled) {
 					liftMovement = liftMovement + controller.get_analog(ANALOG_LEFT_Y);
-					if (controller.get_analog(ANALOG_LEFT_Y)>20 && tray.get_position()<440.0) {
+					if (controller.get_analog(ANALOG_LEFT_Y)>20 && tray.get_position()<500.0) {
 						tray.move(controller.get_analog(ANALOG_LEFT_Y)*1.5);}
-						if (liftMovement > 2800.0) { //maxLiftMovement
-							liftMovement = 2800.0;
+						if (liftMovement > 3400.0) { //maxLiftMovement
+							liftMovement = 3400.0;
 						} else if (liftMovement < 100.0) { //minLiftMovement
 							liftMovement = 100.0;
 							liftEnabled = false;
@@ -245,7 +245,10 @@ void opcontrol() {
 		//Move to position from left joystick at max speed 127
 
 		//INTAKE
-		if (controller.get_digital(DIGITAL_L1)) {
+		if (controller.get_digital(DIGITAL_L1) && controller.get_digital(DIGITAL_L2)) {
+			intakeL.move(-128);
+			intakeR.move(128);
+		} else if (controller.get_digital(DIGITAL_L1)) {
 			intakeL.move(128); //FULL POWER
 			intakeR.move(-128);
 		} else if (controller.get_digital(DIGITAL_L2)) {
