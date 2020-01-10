@@ -33,7 +33,7 @@ void initialize() {
 	pros::Motor tray_initializer (MOTOR_TRAY, pros::E_MOTOR_GEARSET_36, false, pros::E_MOTOR_ENCODER_DEGREES);
 
 
-	pros::lcd::set_text(1, "Test Bot: Verson 1.4");
+	pros::lcd::set_text(1, "Test Bot: Verson 1.5");
 
 
 }
@@ -72,35 +72,52 @@ void competition_initialize() {}
 	pros::lcd::set_text(2, "LD: " + std::to_string(velocity));
  }
  void moveRight(pros::Motor r, int velocity) {
-	r.move(velocity);
+	r.move(-velocity);
 	pros::lcd::set_text(3, "RD: " + std::to_string(velocity));
  }
-using namespace okapi;
-auto chassis = ChassisControllerFactory::create(MOTOR_LEFT_FRONT, MOTOR_RIGHT_FRONT, MOTOR_LEFT_BACK, MOTOR_RIGHT_BACK);
+//using namespace okapi;
+//auto chassis = ChassisControllerFactory::create(Motor(MOTOR_LEFT_FRONT), Motor(MOTOR_RIGHT_FRONT), Motor(MOTOR_LEFT_BACK), Motor(MOTOR_RIGHT_BACK));
 void autonomous() {
 	//Turning is moving, moving is turning.
-	pros::Motor leftB (MOTOR_LEFT_BACK);
-	pros::Motor rightB (MOTOR_RIGHT_BACK, true);
+	pros::Motor leftB (MOTOR_LEFT_BACK, true);
+	pros::Motor rightB (MOTOR_RIGHT_BACK);
 	pros::Motor leftF (MOTOR_LEFT_FRONT, true);
 	pros::Motor rightF (MOTOR_RIGHT_FRONT);
+
 	pros::Motor tray (MOTOR_TRAY);
 	pros::Motor intakeL (INTAKE_LEFT);
 	pros::Motor intakeR (INTAKE_RIGHT);
-	chassis.waitUntilSettled();
-	chassis.turnAngle(1000); //negative is forwards
-	chassis.waitUntilSettled();
+	leftB.move_relative(7400, 96);
+	leftF.move_relative(7400, 96);
+	rightB.move_relative(7500, 90);
+	rightF.move_relative(7500, 90);
+	pros::delay(2000);
+	leftB.move(0);
+	leftF.move(0);
+	rightB.move(0);
+	rightF.move(0);
+
+	pros::delay(2000);
+
+	//chassis.turn_Angle(-850); //negative is forwards; -910 is barely too far
+	//260 is 1 tile at low battery
 	intakeL.move(-128); //FULL POWER
 	intakeR.move(128);
 	pros::delay(1000);
 	intakeL.move(0);
 	intakeR.move(0);
-	leftF.move(-64);
+	pros::delay(2000);
 	leftB.move(-64);
-	pros::delay(100);
-	leftF.move(0);
+	leftF.move(-64);
+	rightF.move(-32);
+	rightB.move(-32);
+	pros::delay(200);
 	leftB.move(0);
-	chassis.turnAngle(250);
-	chassis.moveDistance(180); //rotate 180 degrees
+	leftF.move(0);
+	rightB.move(0);
+	rightF.move(0);
+	//chassis.turnAngle(250);
+	//chassis.moveDistance(180); //rotate 180 degrees
 
 }
 
@@ -123,9 +140,9 @@ void opcontrol() {
 	pros::Motor left (MOTOR_LEFT_BACK, MOTOR_LEFT_FRONT);
 	pros::Motor right (MOTOR_RIGHT_BACK, MOTOR_RIGHT_FRONT);
 	pros::Motor leftB (MOTOR_LEFT_BACK);
-	pros::Motor rightB (MOTOR_RIGHT_BACK, true);
+	pros::Motor rightB (MOTOR_RIGHT_BACK);
 	pros::Motor leftF (MOTOR_LEFT_FRONT, true);
-	pros::Motor rightF (MOTOR_RIGHT_FRONT);
+	pros::Motor rightF (MOTOR_RIGHT_FRONT, true);
 
 	pros::Motor tray (MOTOR_TRAY); //Uses initialization above; 100 RPM
 	pros::Motor lift (MOTOR_LIFT);
@@ -143,6 +160,7 @@ void opcontrol() {
 	double liftMovement = 120.0;
 	double liftDiff = 0.0;
 	bool liftEnabled = false;
+
 	while (true) {
 		//DRIVE
 		switch (drive) {
@@ -191,7 +209,7 @@ void opcontrol() {
 				pros::lcd::set_text(4, std::to_string(tray.get_position()));
 				pros::lcd::set_text(5, std::to_string(lift.get_voltage()));
 				pros::lcd::set_text(6, std::to_string(liftMovement));
-
+				pros::lcd::set_text(7, std::to_string(leftB.get_position()));
 				if (liftEnabled) {
 					liftMovement = liftMovement + controller.get_analog(ANALOG_LEFT_Y);
 					if (controller.get_analog(ANALOG_LEFT_Y)>20 && tray.get_position()<500.0) {
@@ -211,7 +229,7 @@ void opcontrol() {
 				}
 				//pros::lcd::set_text(5, "LIFT: " + std::to_string(liftMovement));
 				if (abs(liftMovement - liftDiff)> 100.0) {
-				lift.move_absolute(liftMovement, 64); //max set at 50% power
+				lift.move_absolute(liftMovement, 96); //max set at 50% power
 				liftDiff = liftMovement;
 
 			}
@@ -231,8 +249,8 @@ void opcontrol() {
 			intakeL.move(128); //FULL POWER
 			intakeR.move(-128);
 		} else if (controller.get_digital(DIGITAL_L2)) {
-			intakeL.move(-128);
-			intakeR.move(128);
+			intakeL.move(-96); //75% power outtake
+			intakeR.move(96);
 		} else {
 			intakeL.move(0);
 			intakeR.move(0);
