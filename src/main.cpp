@@ -217,7 +217,7 @@ void opcontrol() {
 						if (liftMovement > 3400.0) { //maxLiftMovement
 							liftMovement = 3400.0;
 						} else if (liftMovement < 100.0) { //minLiftMovement
-							liftMovement = 100.0;
+							liftMovement = 90.0;
 							liftEnabled = false;
 							lift.move(0);
 					}
@@ -228,7 +228,7 @@ void opcontrol() {
 					}
 				}
 				//pros::lcd::set_text(5, "LIFT: " + std::to_string(liftMovement));
-				if (abs(liftMovement - liftDiff)> 100.0) {
+				if (abs(liftMovement - liftDiff)> 100.0) { //add && liftEnabled to not force lift down
 				lift.move_absolute(liftMovement, 96); //max set at 50% power
 				liftDiff = liftMovement;
 
