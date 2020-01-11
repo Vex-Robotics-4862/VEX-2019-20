@@ -105,8 +105,8 @@ void autonomous() {
 	// rightF.move_relative(90, 90);
 	// pros::delay(2000);
 	case close_cube:
-	intakeL.move(128); //INTAKE
-	intakeR.move(-128);
+	intakeL.move(64); //INTAKE
+	intakeR.move(-64);
 	pros::delay(200);
 	leftB.move_relative(750, 96);
 	leftF.move_relative(750, 96);
@@ -141,21 +141,46 @@ void autonomous() {
 	rightB.move(0);
 	rightF.move(0);
 	break;
+	// *******
 	case five_cube:
-	leftB.move(70);
-	leftF.move(70);
-	rightB.move(70);
-	rightF.move(70);
+	// leftB.move(70);
+	// leftF.move(70);
+	// rightB.move(70);
+	// rightF.move(70);
+	leftB.move_relative(3500, 70);
+	leftF.move_relative(3500, 70);
+	rightB.move_relative(3500, 70);
+	rightF.move_relative(3500, 70);
 	intakeL.move(128);
 	intakeR.move(-128);
-	pros::delay(2500);
+	pros::delay(1450);
 	leftB.move(0);
 	leftF.move(0);
 	rightB.move(0);
 	rightF.move(0);
-	pros::delay(1000);
+	pros::delay(800);
 	intakeL.move(0);
 	intakeR.move(0);
+	leftB.move_relative(-940, 64);
+	leftF.move_relative(-940, 64);
+	rightB.move_relative(940, 64);
+	rightF.move_relative(940, 64);
+	pros::delay(2000);
+	leftB.move(70);
+	leftF.move(70);
+	rightB.move(70);
+	rightF.move(70);
+	pros::delay(1300);
+	leftB.move(0);
+	leftF.move(0);
+	rightB.move(0);
+	rightF.move(0);
+	tray.move_relative(500, 96);
+	leftB.move_relative(-450, 96);
+	leftF.move_relative(-450, 96);
+	rightB.move_relative(-450, 96);
+	rightF.move_relative(-450, 96);
+
 	break;
 	default:
 	leftB.move_relative(750, 96);
@@ -187,6 +212,7 @@ void autonomous() {
 	leftF.move(0);
 	rightB.move(0);
 	rightF.move(0);
+
 	break;
 	}
 	//chassis.turnAngle(250);
@@ -263,7 +289,7 @@ void opcontrol() {
 			drive = right_only;
 		}
 		//TRAY
-		if (controller.get_digital(DIGITAL_R1)) {
+		if (controller.get_digital(DIGITAL_R1)  && tray.get_position()<500.0) {
 			if (true/*tray.get_position()<1000.0*/) {
 				tray.move(96);
 			}; //50% power...?
