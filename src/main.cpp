@@ -75,6 +75,9 @@ void competition_initialize() {}
 	r.move(-velocity);
 	pros::lcd::set_text(3, "RD: " + std::to_string(velocity));
  }
+ void forward_relative(pros::Motor all, double distance) {
+
+ }
 //using namespace okapi;
 //auto chassis = ChassisControllerFactory::create(Motor(MOTOR_LEFT_FRONT), Motor(MOTOR_RIGHT_FRONT), Motor(MOTOR_LEFT_BACK), Motor(MOTOR_RIGHT_BACK));
 void autonomous() {
@@ -87,17 +90,85 @@ void autonomous() {
 	pros::Motor tray (MOTOR_TRAY);
 	pros::Motor intakeL (INTAKE_LEFT);
 	pros::Motor intakeR (INTAKE_RIGHT);
-	leftB.move_relative(7400, 96);
-	leftF.move_relative(7400, 96);
-	rightB.move_relative(7500, 90);
-	rightF.move_relative(7500, 90);
+	enum autoType { close_cube, old_auto, five_cube };
+	autoType whatAuto = close_cube;
+
+	switch (whatAuto) {
+	// leftB.move_relative(350, 96);
+	// leftF.move_relative(350, 96);
+	// rightB.move_relative(350, 90);
+	// rightF.move_relative(350, 90);
+	// pros::delay(2000);
+	// leftB.move_relative(-90, 96);
+	// leftF.move_relative(-90, 96);
+	// rightB.move_relative(90, 90);
+	// rightF.move_relative(90, 90);
+	// pros::delay(2000);
+	case close_cube:
+	intakeL.move(128); //INTAKE
+	intakeR.move(-128);
+	pros::delay(200);
+	leftB.move_relative(750, 96);
+	leftF.move_relative(750, 96);
+	rightB.move_relative(750, 96);
+	rightF.move_relative(750, 96);
+	pros::delay(800);
+	intakeL.move(0);
+	intakeR.move(0);
+	pros::delay(1000);
+	leftB.move(0);
+	leftF.move(0);
+	rightB.move(0);
+	rightF.move(0);
+
+
+
+	//chassis.turn_Angle(-850); //negative is forwards; -910 is barely too far
+	//260 is 1 tile at low battery
+	intakeL.move(-128); //OUTTAKE
+	intakeR.move(128);
+	pros::delay(1000);
+	intakeL.move(0);
+	intakeR.move(0);
+	pros::delay(1000);
+	leftB.move(-48);
+	leftF.move(-48);
+	rightF.move(-48);
+	rightB.move(-48);
+	pros::delay(1000);
+	leftB.move(0);
+	leftF.move(0);
+	rightB.move(0);
+	rightF.move(0);
+	break;
+	case five_cube:
+	leftB.move(70);
+	leftF.move(70);
+	rightB.move(70);
+	rightF.move(70);
+	intakeL.move(128);
+	intakeR.move(-128);
+	pros::delay(2500);
+	leftB.move(0);
+	leftF.move(0);
+	rightB.move(0);
+	rightF.move(0);
+	pros::delay(1000);
+	intakeL.move(0);
+	intakeR.move(0);
+	break;
+	default:
+	leftB.move_relative(750, 96);
+	leftF.move_relative(750, 96);
+	rightB.move_relative(750, 96);
+	rightF.move_relative(750, 96);
 	pros::delay(2000);
 	leftB.move(0);
 	leftF.move(0);
 	rightB.move(0);
 	rightF.move(0);
 
-	pros::delay(500);
+	pros::delay(200);
 
 	//chassis.turn_Angle(-850); //negative is forwards; -910 is barely too far
 	//260 is 1 tile at low battery
@@ -107,15 +178,17 @@ void autonomous() {
 	intakeL.move(0);
 	intakeR.move(0);
 	pros::delay(2000);
-	leftB.move(-64);
-	leftF.move(-64);
-	rightF.move(-32);
-	rightB.move(-32);
-	pros::delay(200);
+	leftB.move(-48);
+	leftF.move(-48);
+	rightF.move(-48);
+	rightB.move(-48);
+	pros::delay(1000);
 	leftB.move(0);
 	leftF.move(0);
 	rightB.move(0);
 	rightF.move(0);
+	break;
+	}
 	//chassis.turnAngle(250);
 	//chassis.moveDistance(180); //rotate 180 degrees
 
@@ -269,6 +342,7 @@ void opcontrol() {
 
 
 		pros::delay(40);
+
 	}
 
 
