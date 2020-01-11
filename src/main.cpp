@@ -97,7 +97,7 @@ void autonomous() {
 	rightB.move(0);
 	rightF.move(0);
 
-	pros::delay(2000);
+	pros::delay(500);
 
 	//chassis.turn_Angle(-850); //negative is forwards; -910 is barely too far
 	//260 is 1 tile at low battery
