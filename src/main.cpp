@@ -122,7 +122,6 @@ void autonomous() {
 	rightF.move(0);
 
 
-
 	//chassis.turn_Angle(-850); //negative is forwards; -910 is barely too far
 	//260 is 1 tile at low battery
 	intakeL.move(-128); //OUTTAKE
@@ -259,6 +258,7 @@ void opcontrol() {
 	double liftMovement = 120.0;
 	double liftDiff = 0.0;
 	bool liftEnabled = false;
+	int liftDoubleClick = 0;
 
 	while (true) {
 		//DRIVE
@@ -289,14 +289,30 @@ void opcontrol() {
 			drive = right_only;
 		}
 		//TRAY
-		if (controller.get_digital(DIGITAL_R1)  && tray.get_position()<500.0) {
-			if (true/*tray.get_position()<1000.0*/) {
-				tray.move(96);
-			}; //50% power...?
-		} else if (controller.get_digital(DIGITAL_R2)) {
-			tray.move(-96);
+		if (controller.get_digital(DIGITAL_R1)) {
+			if ((tray.get_position()<816.0 || liftDoubleClick > 1) && tray.get_position()<1000.0) {
+				if (tray.get_position() > 500.0) {
+					liftDoubleClick = 3;
+					tray.move(40);
+				} else {
+					liftDoubleClick = 0;
+					tray.move(96);
+				}
+			} else { //50% power...?
+				liftDoubleClick = 1;
+
+			}
+		} else if (controller.get_digital(DIGITAL_R2) && tray.get_position()>220.0) {
+
+				tray.move(-64);
+
 		} else {
 			tray.move(0);
+			if (liftDoubleClick == 1) {
+				liftDoubleClick = 2;
+			} else if (liftDoubleClick == 3) {
+				liftDoubleClick = 0;
+			}
 		}
 
 		//switch (drive) {
