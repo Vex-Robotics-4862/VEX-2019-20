@@ -391,7 +391,7 @@ void opcontrol() {
 		} else if (controller.get_digital(DIGITAL_L2)) {
 			intakeL.move(-48);
 			intakeR.move(48);
-		} else {
+		} else if (abs(controller.get_analog(ANALOG_LEFT_X)) < 16) {
 			intakeL.move(0);
 			intakeR.move(0);
 		}
