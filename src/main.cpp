@@ -274,12 +274,13 @@ void opcontrol() {
 				moveRight(right, round(mag * sin(dir - 0.785)));*/
 				break;
 			case right_only:
-				mag = hypot(controller.get_analog(ANALOG_RIGHT_X), controller.get_analog(ANALOG_RIGHT_Y)) * 4/3;
+				mag = hypot(controller.get_analog(ANALOG_RIGHT_X), controller.get_analog(ANALOG_RIGHT_Y)) * 1.42; //mult by sqrt(2)
 				dir = atan2((double)controller.get_analog(ANALOG_RIGHT_Y), (double)controller.get_analog(ANALOG_RIGHT_X));
-				moveLeft(leftB, round(mag * cos(dir - 0.785))); //1.75 = pi/2
-				moveRight(rightB, round(mag * sin(dir - 0.785)));
-				moveLeft(leftF, round(mag * cos(dir - 0.785)));
-				moveRight(rightF, round(mag * sin(dir - 0.785)));
+				//dir =
+				moveLeft(leftB, round(mag * cos(dir - 0.7854))); //0.785 = pi/4; intersect of sin and cos
+				moveRight(rightB, round(mag * sin(dir - 0.7854)));
+				moveLeft(leftF, round(mag * cos(dir - 0.7854)));
+				moveRight(rightF, round(mag * sin(dir - 0.7854)));
 				break;
 		}
 		if (controller.get_digital(DIGITAL_A)) {
@@ -291,9 +292,13 @@ void opcontrol() {
 		//TRAY
 		if (controller.get_digital(DIGITAL_R1)) {
 			if ((tray.get_position()<816.0 || liftDoubleClick > 1) && tray.get_position()<1000.0) {
+				if (tray.get_position() > 930.0) {
+					liftDoubleClick += 1;
+					
+				}
 				if (tray.get_position() > 500.0) {
 					liftDoubleClick = 3;
-					tray.move(64);
+					tray.move(71);
 
 				} else {
 					liftDoubleClick = 0;
