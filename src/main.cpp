@@ -293,10 +293,11 @@ void opcontrol() {
 		//TRAY
 		if (controller.get_digital(DIGITAL_R1)) {
 			if ((tray.get_position()<816.0 || liftDoubleClick > 1) && tray.get_position()<1000.0) {
-				if (tray.get_position() > 930.0) {
+				if (tray.get_position() > 830.0) {
 					liftTimer += 1;
-					if (liftTimer > 50) { //50 * 40ms delay = 2 seconds
-						tray.move(64);
+					tray.move(0);
+					if (liftTimer > 25) { //50 * 40ms delay = 2 seconds
+						tray.move(32);
 					}
 				} else if (tray.get_position() > 500.0) {
 					liftDoubleClick = 3;
@@ -312,7 +313,7 @@ void opcontrol() {
 				}
 			} else { //50% power...?
 				liftDoubleClick = 1;
-
+				tray.move(0);
 			}
 		} else if (controller.get_digital(DIGITAL_R2) && tray.get_position()>220.0) {
 
