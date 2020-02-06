@@ -91,7 +91,7 @@ void autonomous() {
 	pros::Motor intakeL (INTAKE_LEFT);
 	pros::Motor intakeR (INTAKE_RIGHT);
 	enum autoType { close_cube, old_auto, five_cube };
-	autoType whatAuto = close_cube;
+	autoType whatAuto = five_cube;
 
 	switch (whatAuto) {
 	// leftB.move_relative(350, 96);
@@ -146,10 +146,10 @@ void autonomous() {
 	// leftF.move(70);
 	// rightB.move(70);
 	// rightF.move(70);
-	leftB.move_relative(3500, 70);
-	leftF.move_relative(3500, 70);
-	rightB.move_relative(3500, 70);
-	rightF.move_relative(3500, 70);
+	leftB.move_relative(3500, 55);
+	leftF.move_relative(3500, 55);
+	rightB.move_relative(3500, 55);
+	rightF.move_relative(3500, 55);
 	intakeL.move(128);
 	intakeR.move(-128);
 	pros::delay(1450);
@@ -327,7 +327,7 @@ void opcontrol() {
 				pros::lcd::set_text(7, std::to_string(leftB.get_position()));
 				if (liftEnabled) {
 					//lift.move(controller.get_analog(ANALOG_LEFT_Y)*(4/3));
-					if (controller.get_analog(ANALOG_LEFT_Y)>20 && tray.get_position()<717.0) {
+					if (controller.get_analog(ANALOG_LEFT_Y)>20 && tray.get_position()<615.0) {
 						tray.move(controller.get_analog(ANALOG_LEFT_Y)*1.5);}
 						liftMovement = liftMovement + controller.get_analog(ANALOG_LEFT_Y);
 						if (liftMovement > 3400.0) { //maxLiftMovement
@@ -345,7 +345,7 @@ void opcontrol() {
 				}
 				//pros::lcd::set_text(5, "LIFT: " + std::to_string(liftMovement));
 				if (abs(liftMovement - lift.get_position())> 100.0 && liftMovement != 0.0) { //add && liftEnabled to not force lift down
-				lift.move_absolute(liftMovement, 96); //max set at 50% power
+				lift.move_absolute(liftMovement, 127); //max set at 50% power
 				//liftDiff = liftMovement;
 				//TODO
 			}
