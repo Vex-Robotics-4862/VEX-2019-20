@@ -259,6 +259,7 @@ void opcontrol() {
 	double liftDiff = 0.0;
 	bool liftEnabled = false;
 	int liftDoubleClick = 0;
+	int liftTimer = 0;
 
 	while (true) {
 		//DRIVE
@@ -293,8 +294,10 @@ void opcontrol() {
 		if (controller.get_digital(DIGITAL_R1)) {
 			if ((tray.get_position()<816.0 || liftDoubleClick > 1) && tray.get_position()<1000.0) {
 				if (tray.get_position() > 930.0) {
-					liftDoubleClick += 1;
-					
+					liftTimer += 1;
+					if (liftTimer > 50) { //50 * 40ms delay = 2 seconds
+						tray.move(64);
+					}
 				}
 				if (tray.get_position() > 500.0) {
 					liftDoubleClick = 3;
@@ -302,6 +305,7 @@ void opcontrol() {
 
 				} else {
 					liftDoubleClick = 0;
+					liftTimer = 0; //RESET lift timer at this point
 					tray.move(96);
 					if (lift.get_position() < 120.0) {
 						lift.move(64);
