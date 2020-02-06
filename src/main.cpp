@@ -298,7 +298,9 @@ void opcontrol() {
 				} else {
 					liftDoubleClick = 0;
 					tray.move(96);
-					
+					if (lift.get_position() < 120.0) {
+						lift.move(64);
+					}
 				}
 			} else { //50% power...?
 				liftDoubleClick = 1;
@@ -356,9 +358,11 @@ void opcontrol() {
 			} else if (abs(controller.get_analog(ANALOG_LEFT_Y)) > 48 && !controller.get_digital(DIGITAL_R1)) {
 				lift.set_brake_mode(MOTOR_BRAKE_HOLD);
 				lift.move(controller.get_analog(ANALOG_LEFT_Y));
-				if (tray.get_position()<615.0) {
+				if (tray.get_position()<570.0) {
 					tray.move(controller.get_analog(ANALOG_LEFT_Y) * 1.5);
 				}
+			} else if (abs(controller.get_analog(ANALOG_LEFT_Y)) < 49) {
+				lift.move(0);
 			}
 			if (controller.get_digital((DIGITAL_UP))) {
 				//lift.move_absolute(1800, 64);
@@ -371,6 +375,13 @@ void opcontrol() {
 		//Move to position from left joystick at max speed 127
 
 		//INTAKE
+		if (controller.get_analog(ANALOG_LEFT_X) > 16) {
+			intakeL.move(controller.get_analog(ANALOG_LEFT_X)/4);
+			intakeR.move(-controller.get_analog(ANALOG_LEFT_X)/4);
+		} else if (controller.get_analog(ANALOG_LEFT_X) < -16) {
+			intakeL.move(controller.get_analog(ANALOG_LEFT_X)/4);
+			intakeR.move(-controller.get_analog(ANALOG_LEFT_X)/4);
+		}
 		if (controller.get_digital(DIGITAL_L1) && controller.get_digital(DIGITAL_L2)) {
 			intakeL.move(-128);
 			intakeR.move(128);
@@ -384,13 +395,7 @@ void opcontrol() {
 			intakeL.move(0);
 			intakeR.move(0);
 		}
-		if (controller.get_analog(ANALOG_LEFT_X) > 16) {
-			intakeL.move(controller.get_analog(ANALOG_LEFT_X)/4);
-			intakeR.move(-controller.get_analog(ANALOG_LEFT_X)/4);
-		} else if (controller.get_analog(ANALOG_LEFT_X) < -16) {
-			intakeL.move(controller.get_analog(ANALOG_LEFT_X)/4);
-			intakeR.move(-controller.get_analog(ANALOG_LEFT_X)/4);
-		}
+
 
 
 
