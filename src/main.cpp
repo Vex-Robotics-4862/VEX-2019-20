@@ -294,9 +294,11 @@ void opcontrol() {
 				if (tray.get_position() > 500.0) {
 					liftDoubleClick = 3;
 					tray.move(64);
+
 				} else {
 					liftDoubleClick = 0;
 					tray.move(96);
+					
 				}
 			} else { //50% power...?
 				liftDoubleClick = 1;
@@ -323,9 +325,9 @@ void opcontrol() {
 
 				pros::lcd::set_text(4, std::to_string(tray.get_position()));
 				pros::lcd::set_text(5, std::to_string(lift.get_voltage()));
-				pros::lcd::set_text(6, std::to_string(liftMovement));
+				pros::lcd::set_text(6, std::to_string(lift.get_position()));
 				pros::lcd::set_text(7, std::to_string(leftB.get_position()));
-				if (liftEnabled) {
+				/*if (liftEnabled) {
 					//lift.move(controller.get_analog(ANALOG_LEFT_Y)*(4/3));
 					if (controller.get_analog(ANALOG_LEFT_Y)>20 && tray.get_position()<615.0) {
 						tray.move(controller.get_analog(ANALOG_LEFT_Y)*1.5);}
@@ -348,8 +350,16 @@ void opcontrol() {
 				lift.move_absolute(liftMovement, 127); //max set at 50% power
 				//liftDiff = liftMovement;
 				//TODO
+			}*/
+			if (lift.get_position() < 200.0 && controller.get_analog(ANALOG_LEFT_Y) < 2) {
+				//lift.move(-4);
+			} else if (abs(controller.get_analog(ANALOG_LEFT_Y)) > 48 && !controller.get_digital(DIGITAL_R1)) {
+				lift.set_brake_mode(MOTOR_BRAKE_HOLD);
+				lift.move(controller.get_analog(ANALOG_LEFT_Y));
+				if (tray.get_position()<615.0) {
+					tray.move(controller.get_analog(ANALOG_LEFT_Y) * 1.5);
+				}
 			}
-
 			if (controller.get_digital((DIGITAL_UP))) {
 				//lift.move_absolute(1800, 64);
 				if (tray.get_position()<1000.0) {
