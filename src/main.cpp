@@ -293,7 +293,7 @@ void opcontrol() {
 			if ((tray.get_position()<816.0 || liftDoubleClick > 1) && tray.get_position()<1000.0) {
 				if (tray.get_position() > 500.0) {
 					liftDoubleClick = 3;
-					tray.move(40);
+					tray.move(64);
 				} else {
 					liftDoubleClick = 0;
 					tray.move(96);
