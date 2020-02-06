@@ -298,8 +298,7 @@ void opcontrol() {
 					if (liftTimer > 50) { //50 * 40ms delay = 2 seconds
 						tray.move(64);
 					}
-				}
-				if (tray.get_position() > 500.0) {
+				} else if (tray.get_position() > 500.0) {
 					liftDoubleClick = 3;
 					tray.move(71);
 
