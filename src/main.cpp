@@ -326,17 +326,16 @@ void opcontrol() {
 				pros::lcd::set_text(6, std::to_string(liftMovement));
 				pros::lcd::set_text(7, std::to_string(leftB.get_position()));
 				if (liftEnabled) {
-					lift.move(controller.get_analog(ANALOG_LEFT_Y)*(4/3));
+					//lift.move(controller.get_analog(ANALOG_LEFT_Y)*(4/3));
 					if (controller.get_analog(ANALOG_LEFT_Y)>20 && tray.get_position()<717.0) {
 						tray.move(controller.get_analog(ANALOG_LEFT_Y)*1.5);}
+						liftMovement = liftMovement + controller.get_analog(ANALOG_LEFT_Y);
 						if (liftMovement > 3400.0) { //maxLiftMovement
 							liftMovement = 3400.0;
 						} else if (liftMovement < 100.0) { //minLiftMovement
 							liftMovement = 90.0;
 							liftEnabled = false;
 							lift.move(0);
-						} else {
-							liftMovement = 0.0;
 						}
 				} else {
 					if (controller.get_analog(ANALOG_LEFT_Y) > 32) {
@@ -345,9 +344,9 @@ void opcontrol() {
 					}
 				}
 				//pros::lcd::set_text(5, "LIFT: " + std::to_string(liftMovement));
-				if (abs(liftMovement - liftDiff)> 100.0 && liftMovement != 0.0) { //add && liftEnabled to not force lift down
+				if (abs(liftMovement - lift.get_position())> 100.0 && liftMovement != 0.0) { //add && liftEnabled to not force lift down
 				lift.move_absolute(liftMovement, 96); //max set at 50% power
-				liftDiff = liftMovement;
+				//liftDiff = liftMovement;
 				//TODO
 			}
 
