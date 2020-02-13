@@ -146,40 +146,43 @@ void autonomous() {
 	// leftF.move(70);
 	// rightB.move(70);
 	// rightF.move(70);
-	leftB.move_relative(3500, 55);
-	leftF.move_relative(3500, 55);
-	rightB.move_relative(3500, 55);
-	rightF.move_relative(3500, 55);
+	leftB.move_relative(2150, 55);
+	leftF.move_relative(2150, 55);
+	rightB.move_relative(2150, 55);
+	rightF.move_relative(2150, 55); //less distance
 	intakeL.move(128);
 	intakeR.move(-128);
-	pros::delay(1450);
+	pros::delay(4300);
 	leftB.move(0);
 	leftF.move(0);
 	rightB.move(0);
 	rightF.move(0);
-	pros::delay(800);
+	pros::delay(500);
 	intakeL.move(0);
 	intakeR.move(0);
-	leftB.move_relative(-940, 64);
-	leftF.move_relative(-940, 64);
-	rightB.move_relative(940, 64);
-	rightF.move_relative(940, 64);
-	pros::delay(2000);
-	leftB.move(70);
-	leftF.move(70);
-	rightB.move(70);
-	rightF.move(70);
-	pros::delay(1300);
+	leftB.move_relative(-805, 64);
+	leftF.move_relative(-805, 64);
+	rightB.move_relative(805, 64);
+	rightF.move_relative(805, 64);
+	pros::delay(3200);
+	leftB.move_relative(1500, 64);
+	leftF.move_relative(1500, 64);
+	rightB.move_relative(1500, 64);
+	rightF.move_relative(1500, 64);
+	pros::delay(2750);
 	leftB.move(0);
 	leftF.move(0);
 	rightB.move(0);
 	rightF.move(0);
-	tray.move_relative(500, 96);
-	leftB.move_relative(-450, 96);
-	leftF.move_relative(-450, 96);
-	rightB.move_relative(-450, 96);
-	rightF.move_relative(-450, 96);
-
+	tray.move_relative(1000, 70);
+	pros::delay(3500);
+	leftB.move_relative(-450, 64);
+	leftF.move_relative(-450, 64);
+	rightB.move_relative(-450, 64);
+	rightF.move_relative(-450, 64);
+	tray.move_relative(-600, 70);
+	pros::delay(1000);
+	tray.move(0);
 	break;
 	default:
 	leftB.move_relative(750, 96);
@@ -277,6 +280,7 @@ void opcontrol() {
 			case right_only:
 				mag = hypot(controller.get_analog(ANALOG_RIGHT_X), controller.get_analog(ANALOG_RIGHT_Y)) * 1.42; //mult by sqrt(2)
 				dir = atan2((double)controller.get_analog(ANALOG_RIGHT_Y), (double)controller.get_analog(ANALOG_RIGHT_X));
+				pros::lcd::set_text(8, std::to_string(dir));
 				//dir =
 				moveLeft(leftB, round(mag * cos(dir - 0.7854))); //0.785 = pi/4; intersect of sin and cos
 				moveRight(rightB, round(mag * sin(dir - 0.7854)));
@@ -292,11 +296,11 @@ void opcontrol() {
 		}
 		//TRAY
 		if (controller.get_digital(DIGITAL_R1)) {
-			if ((tray.get_position()<816.0 || liftDoubleClick > 1) && tray.get_position()<1000.0) {
+			if ((tray.get_position()<816.0 || liftDoubleClick > 1) && tray.get_position()<1020.0) {
 				if (tray.get_position() > 830.0) {
 					liftTimer += 1;
 					tray.move(0);
-					if (liftTimer > 25) { //50 * 40ms delay = 2 seconds
+					if (liftTimer > 18) { //ex 50 * 40ms delay = 2 seconds
 						tray.move(32);
 					}
 				} else if (tray.get_position() > 500.0) {
@@ -307,9 +311,9 @@ void opcontrol() {
 					liftDoubleClick = 0;
 					liftTimer = 0; //RESET lift timer at this point
 					tray.move(96);
-					if (lift.get_position() < 120.0) {
-						lift.move(64);
-					}
+					//if (lift.get_position() < 120.0) {
+					//	lift.move(64);
+					//}
 				}
 			} else { //50% power...?
 				liftDoubleClick = 1;
@@ -398,8 +402,8 @@ void opcontrol() {
 			intakeL.move(128); //FULL POWER
 			intakeR.move(-128);
 		} else if (controller.get_digital(DIGITAL_L2)) {
-			intakeL.move(-80);
-			intakeR.move(80);
+			intakeL.move(-67);
+			intakeR.move(67);
 		} else if (abs(controller.get_analog(ANALOG_LEFT_X)) < 16) {
 			intakeL.move(0);
 			intakeR.move(0);
