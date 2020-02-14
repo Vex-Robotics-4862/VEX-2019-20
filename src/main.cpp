@@ -86,13 +86,13 @@ void autonomous() {
 	pros::Motor rightB (MOTOR_RIGHT_BACK);
 	pros::Motor leftF (MOTOR_LEFT_FRONT, true);
 	pros::Motor rightF (MOTOR_RIGHT_FRONT);
-
+	pros::Motor lift (MOTOR_LIFT);
 	pros::Motor tray (MOTOR_TRAY);
 	pros::Motor intakeL (INTAKE_LEFT);
 	pros::Motor intakeR (INTAKE_RIGHT);
-	enum autoType { close_cube, old_auto, five_cube };
+	enum autoType { close_cube, old_auto, five_cube, skills };
 	int side = 1; // -1 is red; 1 is blue
-	autoType whatAuto = five_cube;
+	autoType whatAuto = skills;
 	pros::lcd::set_text(4, std::to_string(whatAuto));
 
 	switch (whatAuto) {
@@ -162,7 +162,6 @@ void autonomous() {
 	leftF.move_relative(2180, 55);
 	rightB.move_relative(2180, 55);
 	rightF.move_relative(2180, 55);
-
 	pros::delay(4000);
 	leftB.move(0);
 	leftF.move(0);
@@ -185,8 +184,8 @@ void autonomous() {
 	leftF.move(0);
 	rightB.move(0);
 	rightF.move(0);
-	intakeL.move_relative(-150,32); //OUTTAKE
-	intakeR.move_relative(150,32);
+	intakeL.move_relative(-250,32); //OUTTAKE
+	intakeR.move_relative(250,32);
 	pros::delay(700);
 	intakeL.move(0);
 	intakeR.move(0);
@@ -207,11 +206,123 @@ void autonomous() {
 	intakeL.move(0);
 	intakeR.move(0);
 
-	//Move in reverse
+	break;
+	case skills:
+	// leftB.move(70);
+	// leftF.move(70);
+	// rightB.move(70);
+	// rightF.move(70);
+	intakeL.move(128);
+	intakeR.move(-128); //INTAKE
+	pros::delay(500);
+	intakeL.move(-32);
+	intakeR.move(32); //OUTTAKE
+	pros::delay(250);
+	intakeL.move(128);
+	intakeR.move(-128); //INTAKE
+	leftB.move_relative(2180, 55);
+	leftF.move_relative(2180, 55);
+	rightB.move_relative(2180, 55);
+	rightF.move_relative(2180, 55);
+	pros::delay(4000);
+	leftB.move(0);
+	leftF.move(0);
+	rightB.move(0);
+	rightF.move(0);
+	pros::delay(100);
+	intakeL.move(0);
+	intakeR.move(0);
+	leftB.move_relative(-806*side, 64); //maybe turn a tad more??
+	leftF.move_relative(-806*side, 64);
+	rightB.move_relative(806*side, 64);
+	rightF.move_relative(806*side, 64);
+	pros::delay(3200);
+	leftB.move_relative(1600, 64);
+	leftF.move_relative(1600, 64);
+	rightB.move_relative(1600, 64);
+	rightF.move_relative(1600, 64);
+	pros::delay(2750);
+	leftB.move(0);
+	leftF.move(0);
+	rightB.move(0);
+	rightF.move(0);
+	intakeL.move_relative(-250,32); //OUTTAKE
+	intakeR.move_relative(250,32);
+	pros::delay(700);
+	intakeL.move(0);
+	intakeR.move(0);
+	tray.move_relative(1000, 70);
+	pros::delay(3500);
+	leftB.move_relative(-450, 48);
+	leftF.move_relative(-450, 48);
+	rightB.move_relative(-450, 48);
+	rightF.move_relative(-450, 48);
+	pros::delay(2000);
+	tray.move_relative(-800, 70);
+	pros::delay(2000);
+	tray.move(0);
+	pros::delay(1000);
+	//intakeL.move(-64);
+	//intakeR.move(64);
+	pros::delay(500);
+	intakeL.move(0);
+	intakeR.move(0);
+
+	leftB.move_relative(-1500, 55);
+	leftF.move_relative(-1500, 55);
+	rightB.move_relative(-1500, 55);
+	rightF.move_relative(-1500, 55);
+	pros::delay(4000);
 	//Rotate
+	leftB.move_relative(765*side, 64); //turn less
+	leftF.move_relative(765*side, 64);
+	rightB.move_relative(-765*side, 64);
+	rightF.move_relative(-765*side, 64);
+	pros::delay(2500);
 	//Intake cube in front
-	//Move back a bit
+	intakeL.move(96);
+	intakeR.move(-96); //INTAKE
+	leftB.move_relative(169*2.5, 48);
+	leftF.move_relative(169*2.5, 48);
+	rightB.move_relative(169*2.5, 48);
+	rightF.move_relative(169*2.5, 48);
+	pros::delay(1500);
+	intakeL.move(0);
+	intakeR.move(0);
+	pros::delay(1000);
+	intakeL.move_relative(-250,32); //OUTTAKE
+	intakeR.move_relative(250,32);
+	pros::delay(700);
+	leftB.move_relative(-100*2.5, 38); //Move back a bit
+	leftF.move_relative(-100*2.5, 38);
+	rightB.move_relative(-100*2.5, 38);
+	rightF.move_relative(-100*2.5, 38);
+	pros::delay(1000);
+	tray.move_relative(540, 70);
+	pros::delay(500);
+	lift.move_relative(2950, 70);
+	pros::delay(2000);
+	leftB.move_relative(40*2.5, 38);
+	leftF.move_relative(40*2.5, 38);
+	rightB.move_relative(40*2.5, 38);
+	rightF.move_relative(40*2.5, 38);
+	pros::delay(1000);
 	//Throw cube into tower
+	intakeL.move(-90);
+	intakeR.move(90);
+	pros::delay(1500);
+	intakeL.move(0); //RESET
+	intakeR.move(0);
+	leftB.move_relative(-70*2.5, 48);
+	leftF.move_relative(-70*2.5, 48);
+	rightB.move_relative(-70*2.5, 48);
+	rightF.move_relative(-70*2.5, 48);
+	lift.move_relative(-2950, 70);
+	pros::delay(1000);
+	lift.move(0);
+	tray.move_relative(-550, 70);
+	pros::delay(1500);
+	tray.move(0);
 
 	break;
 
@@ -342,7 +453,7 @@ void opcontrol() {
 				} else {
 					liftDoubleClick = 0;
 					liftTimer = 0; //RESET lift timer at this point
-					tray.move(96);
+					tray.move(108);
 					//if (lift.get_position() < 120.0) {
 					//	lift.move(64);
 					//}
@@ -400,13 +511,13 @@ void opcontrol() {
 			}*/
 			if (lift.get_position() < 200.0 && controller.get_analog(ANALOG_LEFT_Y) < 2) {
 				//lift.move(-4);
-			} else if (abs(controller.get_analog(ANALOG_LEFT_Y)) > 48 && !controller.get_digital(DIGITAL_R1)) {
+			} else if (lift.get_position() < 2900.0 && abs(controller.get_analog(ANALOG_LEFT_Y)) > 48 && !controller.get_digital(DIGITAL_R1)) {
 				lift.set_brake_mode(MOTOR_BRAKE_HOLD);
 				lift.move(controller.get_analog(ANALOG_LEFT_Y));
 				if (tray.get_position()<540.0) {
 					tray.move(controller.get_analog(ANALOG_LEFT_Y) * 1.5);
 				}
-			} else if (abs(controller.get_analog(ANALOG_LEFT_Y)) < 49) {
+			} else if (lift.get_position() > 2900.0 || abs(controller.get_analog(ANALOG_LEFT_Y)) < 49) {
 				lift.move(0);
 			}
 			if (controller.get_digital((DIGITAL_UP))) {
@@ -434,8 +545,8 @@ void opcontrol() {
 			intakeL.move(128); //FULL POWER
 			intakeR.move(-128);
 		} else if (controller.get_digital(DIGITAL_L2)) {
-			intakeL.move(-67);
-			intakeR.move(67);
+			intakeL.move(-60);
+			intakeR.move(60);
 		} else if (abs(controller.get_analog(ANALOG_LEFT_X)) < 16) {
 			intakeL.move(0);
 			intakeR.move(0);
