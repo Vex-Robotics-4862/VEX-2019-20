@@ -91,7 +91,9 @@ void autonomous() {
 	pros::Motor intakeL (INTAKE_LEFT);
 	pros::Motor intakeR (INTAKE_RIGHT);
 	enum autoType { close_cube, old_auto, five_cube };
+	int side = 1; // -1 is red; 1 is blue
 	autoType whatAuto = five_cube;
+	pros::lcd::set_text(4, std::to_string(whatAuto));
 
 	switch (whatAuto) {
 	// leftB.move_relative(350, 96);
@@ -116,6 +118,10 @@ void autonomous() {
 	intakeL.move(0);
 	intakeR.move(0);
 	pros::delay(1000);
+	//ADD OUTTAKE SLOW TINY BIY
+	intakeL.move(-0);
+	intakeR.move(0);
+
 	leftB.move(0);
 	leftF.move(0);
 	rightB.move(0);
@@ -146,10 +152,10 @@ void autonomous() {
 	// leftF.move(70);
 	// rightB.move(70);
 	// rightF.move(70);
-	leftB.move_relative(2150, 55);
-	leftF.move_relative(2150, 55);
-	rightB.move_relative(2150, 55);
-	rightF.move_relative(2150, 55); //less distance
+	leftB.move_relative(2180, 55);
+	leftF.move_relative(2180, 55);
+	rightB.move_relative(2180, 55);
+	rightF.move_relative(2180, 55);
 	intakeL.move(128);
 	intakeR.move(-128);
 	pros::delay(4300);
@@ -160,10 +166,10 @@ void autonomous() {
 	pros::delay(500);
 	intakeL.move(0);
 	intakeR.move(0);
-	leftB.move_relative(-805, 64);
-	leftF.move_relative(-805, 64);
-	rightB.move_relative(805, 64);
-	rightF.move_relative(805, 64);
+	leftB.move_relative(-807*side, 64);
+	leftF.move_relative(-807*side, 64);
+	rightB.move_relative(807*side, 64);
+	rightF.move_relative(807*side, 64);
 	pros::delay(3200);
 	leftB.move_relative(1500, 64);
 	leftF.move_relative(1500, 64);
@@ -176,13 +182,20 @@ void autonomous() {
 	rightF.move(0);
 	tray.move_relative(1000, 70);
 	pros::delay(3500);
-	leftB.move_relative(-450, 64);
-	leftF.move_relative(-450, 64);
-	rightB.move_relative(-450, 64);
-	rightF.move_relative(-450, 64);
-	tray.move_relative(-600, 70);
-	pros::delay(1000);
+	leftB.move_relative(-450, 48);
+	leftF.move_relative(-450, 48);
+	rightB.move_relative(-450, 48);
+	rightF.move_relative(-450, 48);
+	pros::delay(2000);
+	tray.move_relative(-800, 70);
+	pros::delay(2000);
 	tray.move(0);
+	pros::delay(1000);
+	//intakeL.move(-64);
+	//intakeR.move(64);
+	pros::delay(500);
+	intakeL.move(0);
+	intakeR.move(0);
 	break;
 	default:
 	leftB.move_relative(750, 96);
@@ -371,7 +384,7 @@ void opcontrol() {
 			} else if (abs(controller.get_analog(ANALOG_LEFT_Y)) > 48 && !controller.get_digital(DIGITAL_R1)) {
 				lift.set_brake_mode(MOTOR_BRAKE_HOLD);
 				lift.move(controller.get_analog(ANALOG_LEFT_Y));
-				if (tray.get_position()<570.0) {
+				if (tray.get_position()<540.0) {
 					tray.move(controller.get_analog(ANALOG_LEFT_Y) * 1.5);
 				}
 			} else if (abs(controller.get_analog(ANALOG_LEFT_Y)) < 49) {
