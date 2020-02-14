@@ -184,8 +184,8 @@ void autonomous() {
 	leftF.move(0);
 	rightB.move(0);
 	rightF.move(0);
-	intakeL.move_relative(-250,32); //OUTTAKE
-	intakeR.move_relative(250,32);
+	intakeL.move_relative(-450,32); //OUTTAKE
+	intakeR.move_relative(450,32);
 	pros::delay(700);
 	intakeL.move(0);
 	intakeR.move(0);
@@ -236,7 +236,7 @@ void autonomous() {
 	leftF.move_relative(-806*side, 64);
 	rightB.move_relative(806*side, 64);
 	rightF.move_relative(806*side, 64);
-	pros::delay(3200);
+	pros::delay(2500);
 	leftB.move_relative(1600, 64);
 	leftF.move_relative(1600, 64);
 	rightB.move_relative(1600, 64);
@@ -246,8 +246,8 @@ void autonomous() {
 	leftF.move(0);
 	rightB.move(0);
 	rightF.move(0);
-	intakeL.move_relative(-250,32); //OUTTAKE
-	intakeR.move_relative(250,32);
+	intakeL.move_relative(-450,32); //OUTTAKE
+	intakeR.move_relative(450,32);
 	pros::delay(700);
 	intakeL.move(0);
 	intakeR.move(0);
@@ -267,25 +267,30 @@ void autonomous() {
 	pros::delay(500);
 	intakeL.move(0);
 	intakeR.move(0);
-
-	leftB.move_relative(-1500, 55);
-	leftF.move_relative(-1500, 55);
-	rightB.move_relative(-1500, 55);
-	rightF.move_relative(-1500, 55);
+	leftB.move_relative(100*side, 55);
+	leftF.move_relative(100*side, 55);
+	rightB.move_relative(-100*side, 55);
+	rightF.move_relative(-100*side, 55);
+	pros::delay(1000);
+	leftB.move_relative(-1300, 55);
+	leftF.move_relative(-1300, 55);
+	rightB.move_relative(-1300, 55);
+	rightF.move_relative(-1300, 55);
 	pros::delay(4000);
 	//Rotate
-	leftB.move_relative(765*side, 64); //turn less
-	leftF.move_relative(765*side, 64);
-	rightB.move_relative(-765*side, 64);
-	rightF.move_relative(-765*side, 64);
+	leftB.move_relative(660*side, 64); //turn less
+	leftF.move_relative(660*side, 64);
+	rightB.move_relative(-660*side, 64);
+	rightF.move_relative(-660*side, 64);
 	pros::delay(2500);
+
 	//Intake cube in front
 	intakeL.move(96);
 	intakeR.move(-96); //INTAKE
-	leftB.move_relative(169*2.5, 48);
-	leftF.move_relative(169*2.5, 48);
-	rightB.move_relative(169*2.5, 48);
-	rightF.move_relative(169*2.5, 48);
+	leftB.move_relative(189*2.5, 48);
+	leftF.move_relative(189*2.5, 48);
+	rightB.move_relative(189*2.5, 48);
+	rightF.move_relative(189*2.5, 48);
 	pros::delay(1500);
 	intakeL.move(0);
 	intakeR.move(0);
