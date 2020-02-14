@@ -334,7 +334,7 @@ void opcontrol() {
 			}
 		} else if (controller.get_digital(DIGITAL_R2) && tray.get_position()>220.0) {
 
-				tray.move(-64);
+				tray.move(-128);
 
 		} else {
 			tray.move(0);
