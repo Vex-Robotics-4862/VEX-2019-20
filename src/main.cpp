@@ -118,9 +118,7 @@ void autonomous() {
 	intakeL.move(0);
 	intakeR.move(0);
 	pros::delay(1000);
-	//ADD OUTTAKE SLOW TINY BIY
-	intakeL.move(-0);
-	intakeR.move(0);
+
 
 	leftB.move(0);
 	leftF.move(0);
@@ -140,7 +138,7 @@ void autonomous() {
 	leftF.move(-48);
 	rightF.move(-48);
 	rightB.move(-48);
-	pros::delay(1000);
+	pros::delay(300);
 	leftB.move(0);
 	leftF.move(0);
 	rightB.move(0);
@@ -158,12 +156,12 @@ void autonomous() {
 	rightF.move_relative(2180, 55);
 	intakeL.move(128);
 	intakeR.move(-128);
-	pros::delay(4300);
+	pros::delay(4000);
 	leftB.move(0);
 	leftF.move(0);
 	rightB.move(0);
 	rightF.move(0);
-	pros::delay(500);
+	pros::delay(100);
 	intakeL.move(0);
 	intakeR.move(0);
 	leftB.move_relative(-807*side, 64);
@@ -180,6 +178,11 @@ void autonomous() {
 	leftF.move(0);
 	rightB.move(0);
 	rightF.move(0);
+	intakeL.move_relative(-100,32); //OUTTAKE
+	intakeR.move_relative(100,32);
+	pros::delay(200);
+	intakeL.move(0);
+	intakeR.move(0);
 	tray.move_relative(1000, 70);
 	pros::delay(3500);
 	leftB.move_relative(-450, 48);
