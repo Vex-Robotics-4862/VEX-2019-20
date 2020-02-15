@@ -91,7 +91,7 @@ void autonomous() {
 	pros::Motor intakeL (INTAKE_LEFT);
 	pros::Motor intakeR (INTAKE_RIGHT);
 	enum autoType { close_cube, old_auto, five_cube, skills };
-	int side = -1; // -1 is red; 1 is blue
+	int side = 1; // -1 is red; 1 is blue
 	autoType whatAuto = skills;
 	pros::lcd::set_text(4, std::to_string(whatAuto));
 
@@ -165,10 +165,10 @@ void autonomous() {
 	rightF.move(0);
 	intakeL.move(0);
 	intakeR.move(0);
-	leftB.move_relative(-800*side, 75); //maybe turn a tad more??
-	leftF.move_relative(-800*side, 75);
-	rightB.move_relative(800*side, 75);
-	rightF.move_relative(800*side, 75);
+	leftB.move_relative(-775*side, 75); //maybe turn a tad more??
+	leftF.move_relative(-775*side, 75);
+	rightB.move_relative(775*side, 75);
+	rightF.move_relative(775*side, 75);
 	pros::delay(1100);
 	leftB.move_relative(1490, 75);
 	leftF.move_relative(1490, 75);
