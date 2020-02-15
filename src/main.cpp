@@ -7,7 +7,7 @@
 #define MOTOR_RIGHT_BACK 4
 #define MOTOR_TRAY 5
 #define MOTOR_LIFT 6
-#define INTAKE_LEFT 20
+#define INTAKE_LEFT 18 //Port 20 may be not functioning
 #define INTAKE_RIGHT 19
 
 
@@ -92,7 +92,7 @@ void autonomous() {
 	pros::Motor intakeR (INTAKE_RIGHT);
 	enum autoType { close_cube, old_auto, five_cube, skills };
 	int side = 1; // -1 is red; 1 is blue
-	autoType whatAuto = skills;
+	autoType whatAuto = five_cube;
 	pros::lcd::set_text(4, std::to_string(whatAuto));
 
 	switch (whatAuto) {
@@ -199,39 +199,35 @@ void autonomous() {
 
 	break;
 	case skills:
-	// leftB.move(70);
-	// leftF.move(70);
-	// rightB.move(70);
-	// rightF.move(70);
 	intakeL.move(128);
 	intakeR.move(-128); //INTAKE
-	pros::delay(250);
+	pros::delay(500);
 	intakeL.move(-32);
 	intakeR.move(32); //OUTTAKE
-	pros::delay(127);
+	pros::delay(250);
 	intakeL.move(128);
 	intakeR.move(-128); //INTAKE
-	leftB.move_relative(2190, 75);
-	leftF.move_relative(2190, 75);
-	rightB.move_relative(2190, 75);
-	rightF.move_relative(2190, 75);
-	pros::delay(2700);
+	leftB.move_relative(2190, 55);
+	leftF.move_relative(2190, 55);
+	rightB.move_relative(2190, 55);
+	rightF.move_relative(2190, 55);
+	pros::delay(4000);
 	leftB.move(0);
 	leftF.move(0);
 	rightB.move(0);
 	rightF.move(0);
 	intakeL.move(0);
 	intakeR.move(0);
-	leftB.move_relative(-775*side, 75); //maybe turn a tad more??
-	leftF.move_relative(-775*side, 75);
-	rightB.move_relative(775*side, 75);
-	rightF.move_relative(775*side, 75);
-	pros::delay(1100);
-	leftB.move_relative(1490, 75);
-	leftF.move_relative(1490, 75);
-	rightB.move_relative(1490, 75);
-	rightF.move_relative(1490, 75);
-	pros::delay(1700);
+	leftB.move_relative(-795*side, 64); //maybe turn a tad more??
+	leftF.move_relative(-795*side, 64);
+	rightB.move_relative(795*side, 64);
+	rightF.move_relative(795*side, 64);
+	pros::delay(3000);
+	leftB.move_relative(1490, 64);
+	leftF.move_relative(1490, 64);
+	rightB.move_relative(1490, 64);
+	rightF.move_relative(1490, 64);
+	pros::delay(2000);
 	leftB.move(0);
 	leftF.move(0);
 	rightB.move(0);
