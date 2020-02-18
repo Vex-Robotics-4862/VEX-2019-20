@@ -33,7 +33,7 @@ void initialize() {
 	pros::Motor tray_initializer (MOTOR_TRAY, pros::E_MOTOR_GEARSET_36, false, pros::E_MOTOR_ENCODER_DEGREES);
 
 
-	pros::lcd::set_text(1, "Test Bot: Verson 1.5");
+	pros::lcd::set_text(1, "Test Bot: Verson 2.0");
 
 
 }
@@ -92,7 +92,7 @@ void autonomous() {
 	pros::Motor intakeR (INTAKE_RIGHT);
 	enum autoType { close_cube, old_auto, five_cube, skills };
 	int side = 1; // -1 is red; 1 is blue
-	autoType whatAuto = skills;
+	autoType whatAuto = five_cube;
 	pros::lcd::set_text(4, std::to_string(whatAuto));
 
 	switch (whatAuto) {
@@ -118,8 +118,6 @@ void autonomous() {
 	intakeL.move(0);
 	intakeR.move(0);
 	pros::delay(1000);
-
-
 	leftB.move(0);
 	leftF.move(0);
 	rightB.move(0);
@@ -154,19 +152,19 @@ void autonomous() {
 	pros::delay(127);
 	intakeL.move(128);
 	intakeR.move(-128); //INTAKE
-	leftB.move_relative(2220, 75);
-	leftF.move_relative(2220, 75);
-	rightB.move_relative(2220, 75);
-	rightF.move_relative(2220, 75);
+	leftB.move_relative(2240, 75);
+	leftF.move_relative(2240, 75);
+	rightB.move_relative(2240, 75);
+	rightF.move_relative(2240, 75);
 	pros::delay(2900);
 	leftB.move(0);
 	leftF.move(0);
 	rightB.move(0);
 	rightF.move(0);
-	leftB.move_relative(-778*side, 75); //maybe turn a tad more??
-	leftF.move_relative(-778*side, 75);
-	rightB.move_relative(778*side, 75);
-	rightF.move_relative(778*side, 75);
+	leftB.move_relative(-774*side, 75); //maybe turn a tad more??
+	leftF.move_relative(-774*side, 75);
+	rightB.move_relative(774*side, 75);
+	rightF.move_relative(774*side, 75);
 	pros::delay(100);
 	intakeL.move(0);
 	intakeR.move(0);
@@ -175,10 +173,10 @@ void autonomous() {
 	leftF.move(0);
 	rightB.move(0);
 	rightF.move(0);
-	leftB.move_relative(1530, 75);
-	leftF.move_relative(1530, 75);
-	rightB.move_relative(1530, 75);
-	rightF.move_relative(1530, 75);
+	leftB.move_relative(1610, 75);
+	leftF.move_relative(1610, 75);
+	rightB.move_relative(1610, 75);
+	rightF.move_relative(1610, 75);
 	pros::delay(2100);
 	leftB.move(0);
 	leftF.move(0);
@@ -191,10 +189,15 @@ void autonomous() {
 	intakeR.move(0);
 	tray.move_relative(1100, 80);
 	pros::delay(3000);
-	leftB.move_relative(-450, 48);
-	leftF.move_relative(-450, 48);
-	rightB.move_relative(-450, 48);
-	rightF.move_relative(-450, 48);
+	leftB.move_relative(50, 48);
+	leftF.move_relative(50, 48);
+	rightB.move_relative(50, 48);
+	rightF.move_relative(50, 48);
+	pros::delay(300);
+	leftB.move_relative(-550, 48);
+	leftF.move_relative(-550, 48);
+	rightB.move_relative(-550, 48);
+	rightF.move_relative(-550, 48);
 	pros::delay(1300);
 	tray.move_relative(-800, 127);
 	pros::delay(1500);
@@ -272,10 +275,10 @@ void autonomous() {
 
 	pros::delay(1000);
 		// ***
-	leftB.move_relative(105*side, 55);
-	leftF.move_relative(105*side, 55);
-	rightB.move_relative(-105*side, 55);
-	rightF.move_relative(-105*side, 55);
+	leftB.move_relative(109*side, 55);
+	leftF.move_relative(109*side, 55);
+	rightB.move_relative(-109*side, 55);
+	rightF.move_relative(-109*side, 55);
 	pros::delay(1000);
 	leftB.move_relative(-1210, 55);
 	leftF.move_relative(-1210, 55);
@@ -283,10 +286,10 @@ void autonomous() {
 	rightF.move_relative(-1210, 55);
 	pros::delay(4000);
 	//Rotate
-	leftB.move_relative(680*side, 55);
-	leftF.move_relative(680*side, 55);
-	rightB.move_relative(-680*side, 55);
-	rightF.move_relative(-680*side, 55);
+	leftB.move_relative(670*side, 55);
+	leftF.move_relative(670*side, 55);
+	rightB.move_relative(-670*side, 55);
+	rightF.move_relative(-670*side, 55);
 	pros::delay(2500);
 
 	//Intake cube in front
@@ -463,7 +466,7 @@ void opcontrol() {
 				} else {
 					liftDoubleClick = 0;
 					liftTimer = 0; //RESET lift timer at this point
-					tray.move(103);
+					tray.move(100);
 					//if (lift.get_position() < 120.0) {
 					//	lift.move(64);
 					//}
