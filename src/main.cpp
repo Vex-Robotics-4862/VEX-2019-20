@@ -408,15 +408,15 @@ void autonomous() {
 	intakeR.move(-128);
 	pros::delay(300);
 	//start picking up the 9 cubes
-	leftB.move_relative(-5100*side, 75);
-	leftF.move_relative(-5100*side, 75);
-	rightB.move_relative(-5000*side, 75);
-	rightF.move_relative(-5000*side, 75);
+	leftB.move_relative(5100, 75);
+	leftF.move_relative(5100, 75);
+	rightB.move_relative(5000, 75);
+	rightF.move_relative(5000, 75);
 	pros::delay(5000);
-	leftB.move_relative(-5000*side, 75);
-	leftF.move_relative(-5000*side, 75);
-	rightB.move_relative(-5100*side, 75);
-	rightF.move_relative(-5100*side, 75);
+	leftB.move_relative(5000, 75);
+	leftF.move_relative(5000, 75);
+	rightB.move_relative(5100, 75);
+	rightF.move_relative(5100, 75);
 	pros::delay(5000);
 	leftF.move_relative(-235*side, 75);//45 degrees
 	leftB.move_relative(-235*side, 75);
