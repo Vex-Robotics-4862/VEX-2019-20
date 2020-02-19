@@ -86,6 +86,8 @@ void autonomous() {
 	pros::Motor rightB (MOTOR_RIGHT_BACK);
 	pros::Motor leftF (MOTOR_LEFT_FRONT, true);
 	pros::Motor rightF (MOTOR_RIGHT_FRONT);
+
+
 	pros::Motor lift (MOTOR_LIFT);
 	pros::Motor tray (MOTOR_TRAY);
 	pros::Motor intakeL (INTAKE_LEFT);
@@ -210,12 +212,10 @@ void autonomous() {
 	intakeL.move(128);
 	intakeR.move(-128);
 	pros::delay(250);
-	intakeL.move(128);
-	intakeR.move(-128);
-	leftB.move_relative(-1000*side, 75);
-	leftF.move_relative(-1000*side, 75);
-	rightB.move_relative(-1000*side, 75);
-	rightF.move_relative(-1000*side, 75);
+	leftB.move_relative(1000, 75);
+	leftF.move_relative(1000, 75);
+	rightB.move_relative(1000, 75);
+	rightF.move_relative(1000, 75);
 	pros::delay(1000);
 	leftF.move_relative(-470*side, 75); //90 degrees
 	leftB.move_relative(-470*side, 75);
