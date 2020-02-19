@@ -92,9 +92,9 @@ void autonomous() {
 	pros::Motor tray (MOTOR_TRAY);
 	pros::Motor intakeL (INTAKE_LEFT);
 	pros::Motor intakeR (INTAKE_RIGHT);
-	enum autoType { close_cube, old_auto, five_cube, skills1, four_cubes_large, skills2};
+	enum autoType { close_cube, old_auto, five_cube, skills1, three_cube, skills2};
 	int side = -1; // -1 is red; 1 is blue
-	autoType whatAuto = four_cubes_large;
+	autoType whatAuto = three_cube;
 	pros::lcd::set_text(4, std::to_string(whatAuto));
 
 	switch (whatAuto) {
@@ -208,51 +208,41 @@ void autonomous() {
 	intakeR.move(0);
 	break;
 
-	case four_cubes_large:
+	case three_cube:
 	intakeL.move(128);
 	intakeR.move(-128);
 	pros::delay(500);
-	leftB.move_relative(900, 120);
-	leftF.move_relative(900, 120);
-	rightB.move_relative(900, 120);
-	rightF.move_relative(1000, 120);
-	pros::delay(1500);
-	leftF.move_relative(-510*side, 120); //90 degrees
-	leftB.move_relative(-510*side, 120);
-	rightF.move_relative(510*side, 120);
-	rightB.move_relative(510*side, 120);
-	pros::delay(1800);
-	leftF.move_relative(800, 120);
-	leftB.move_relative(800, 120);
-	rightF.move_relative(800, 120);
-	rightB.move_relative(800, 120);
-	pros::delay(1500);
-	leftF.move_relative(-900, 120);
-	leftB.move_relative(-900, 120);
-	rightF.move_relative(-900, 120);
-	rightB.move_relative(-900, 120);
-	pros::delay(2200);
-	leftF.move_relative(-940*side, 120);//180 degrees
-	leftB.move_relative(-940*side, 120);
-	rightF.move_relative(940*side, 120);
-	rightB.move_relative(940*side, 120);
+	leftB.move_relative(900, 100);
+	leftF.move_relative(900, 100);
+	rightB.move_relative(900, 100);
+	rightF.move_relative(900, 100);
+	pros::delay(2000);
+	leftF.move_relative(450*side, 100);//180 degrees
+	leftB.move_relative(450*side, 100);
+	rightF.move_relative(-450*side, 100);
+	rightB.move_relative(-450*side, 100);
 	pros::delay(1700);
-	leftF.move_relative(700, 120);
-	leftB.move_relative(700, 120);
-	rightF.move_relative(700, 120);
-	rightB.move_relative(700, 120);
+	leftF.move_relative(1200, 100);
+	leftB.move_relative(1200, 100);
+	rightF.move_relative(1200, 100);
+	rightB.move_relative(1200, 100);
 	pros::delay(1200);
 	intakeL.move(0);
 	intakeR.move(0);
-	leftF.move_relative(235*side, 120);//45 degrees
-	leftB.move_relative(235*side, 120);
-	rightF.move_relative(-235*side, 120);
-	rightB.move_relative(-235*side, 120);
+	leftF.move_relative(235*side, 100);//45 degrees
+	leftB.move_relative(235*side, 100);
+	rightF.move_relative(-235*side, 100);
+	rightB.move_relative(-235*side, 100);
 	pros::delay(1500);
+	leftF.move_relative(500, 100);
+	leftB.move_relative(500, 100);
+	rightF.move_relative(500, 100);
+	rightB.move_relative(500, 100);
+	pros::delay(500);
 	intakeL.move_relative(-400,32);//outtake
 	intakeR.move_relative(400,32);
 	pros::delay(700);
-	tray.move_relative(1000,80); //tray movement
+	tray.move_relative(1000,75); //tray movement
 	pros::delay(2900);
 	leftB.move_relative(75, 48);
 	leftF.move_relative(75, 48);
@@ -264,7 +254,7 @@ void autonomous() {
 	rightB.move_relative(-300, 48);
 	rightF.move_relative(-300, 48);
 	pros::delay(700);
-	tray.move_relative(-700,127);
+	tray.move_relative(-700,70);
 	pros::delay(700);
 	tray.move(0);
 	break;
