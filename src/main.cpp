@@ -208,64 +208,67 @@ void autonomous() {
 	intakeR.move(0);
 	break;
 
-	case four_cubes_large: //red side
+	case four_cubes_large:
 	intakeL.move(128);
 	intakeR.move(-128);
-	pros::delay(250);
-	leftB.move_relative(1000, 75);
-	leftF.move_relative(1000, 75);
-	rightB.move_relative(1000, 75);
-	rightF.move_relative(1000, 75);
-	pros::delay(1000);
-	leftF.move_relative(-470*side, 75); //90 degrees
-	leftB.move_relative(-470*side, 75);
-	rightF.move_relative(470*side, 75);
-	rightB.move_relative(470*side, 75);
-	pros::delay(1100);
-	leftF.move_relative(800, 75);
-	leftB.move_relative(800, 75);
-	rightF.move_relative(800, 75);
-	rightB.move_relative(800, 75);
-	pros::delay(1000);
-	leftF.move_relative(-900, 75);
-	leftB.move_relative(-900, 75);
-	rightF.move_relative(-900, 75);
-	rightB.move_relative(-900, 75);
-	pros::delay(2000);
-	leftF.move_relative(-940*side, 75);//180 degrees
-	leftB.move_relative(-940*side, 75);
-	rightF.move_relative(940*side, 75);
-	rightB.move_relative(940*side, 75);
+	pros::delay(500);
+	leftB.move_relative(900, 120);
+	leftF.move_relative(900, 120);
+	rightB.move_relative(900, 120);
+	rightF.move_relative(1000, 120);
 	pros::delay(1500);
-	leftF.move_relative(700, 75);
-	leftB.move_relative(700, 75);
-	rightF.move_relative(700, 75);
-	rightB.move_relative(700, 75);
 	intakeL.move(0);
 	intakeR.move(0);
-	pros::delay(1000);
-	leftF.move_relative(235*side, 75);//45 degrees
-	leftB.move_relative(235*side, 75);
-	rightF.move_relative(-235*side, 75);
-	rightB.move_relative(-235*side, 75);
-	pros::delay(1300);
+	leftF.move_relative(-510*side, 120); //90 degrees
+	leftB.move_relative(-510*side, 120);
+	rightF.move_relative(510*side, 120);
+	rightB.move_relative(510*side, 120);
+	pros::delay(1800);
+	leftF.move_relative(800, 120);
+	leftB.move_relative(800, 120);
+	rightF.move_relative(800, 120);
+	rightB.move_relative(800, 120);
+	pros::delay(1500);
+	leftF.move_relative(-900, 120);
+	leftB.move_relative(-900, 120);
+	rightF.move_relative(-900, 120);
+	rightB.move_relative(-900, 120);
+	pros::delay(2200);
+	leftF.move_relative(-940*side, 120);//180 degrees
+	leftB.move_relative(-940*side, 120);
+	rightF.move_relative(940*side, 120);
+	rightB.move_relative(940*side, 120);
+	pros::delay(1700);
+	leftF.move_relative(700, 120);
+	leftB.move_relative(700, 120);
+	rightF.move_relative(700, 120);
+	rightB.move_relative(700, 120);
+	intakeL.move(0);
+	intakeR.move(0);
+	pros::delay(1200);
+	leftF.move_relative(235*side, 120);//45 degrees
+	leftB.move_relative(235*side, 120);
+	rightF.move_relative(-235*side, 120);
+	rightB.move_relative(-235*side, 120);
+	pros::delay(1500);
 	intakeL.move_relative(-400,32);//outtake
 	intakeR.move_relative(400,32);
-	pros::delay(500);
+	pros::delay(700);
 	tray.move_relative(1000,80); //tray movement
 	pros::delay(2900);
-	leftB.move_relative(50, 48);
-	leftF.move_relative(50, 48);
-	rightB.move_relative(50, 48);
-	rightF.move_relative(50, 48);
-	pros::delay(300);
+	leftB.move_relative(75, 48);
+	leftF.move_relative(75, 48);
+	rightB.move_relative(75, 48);
+	rightF.move_relative(75, 48);
+	pros::delay(700);
 	leftB.move_relative(-300, 48);
 	leftF.move_relative(-300, 48);
 	rightB.move_relative(-300, 48);
 	rightF.move_relative(-300, 48);
-	pros::delay(500);
-	tray.move_relative(-1000,127);
-	pros::delay(1000);
+	pros::delay(700);
+	tray.move_relative(-700,127);
+	pros::delay(700);
+	tray.move(0);
 	break;
 
 
@@ -611,14 +614,14 @@ void opcontrol() {
 					if (liftTimer > 18) { //ex 50 * 40ms delay = 2 seconds
 						tray.move(32);
 					}
-				} else if (tray.get_position() > 500.0) {
+				} else if (tray.get_position() > 400.0) {
 					liftDoubleClick = 3;
-					tray.move(71);
+					tray.move(80);
 
 				} else {
 					liftDoubleClick = 0;
 					liftTimer = 0; //RESET lift timer at this point
-					tray.move(100);
+					tray.move(104);
 					//if (lift.get_position() < 120.0) {
 					//	lift.move(64);
 					//}
