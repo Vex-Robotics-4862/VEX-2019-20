@@ -212,11 +212,13 @@ void autonomous() {
 	intakeL.move(128);
 	intakeR.move(-128);
 	pros::delay(500);
-	leftB.move_relative(900, 100);
-	leftF.move_relative(900, 100);
-	rightB.move_relative(900, 100);
-	rightF.move_relative(900, 100);
+	leftB.move_relative(1100, 100);
+	leftF.move_relative(1100, 100);
+	rightB.move_relative(1100, 100);
+	rightF.move_relative(1100, 100);
 	pros::delay(2000);
+	intakeL.move(96);
+	intakeR.move(-96);
 	leftF.move_relative(450*side, 100);//180 degrees
 	leftB.move_relative(450*side, 100);
 	rightF.move_relative(-450*side, 100);
