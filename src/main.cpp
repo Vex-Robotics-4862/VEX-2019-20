@@ -94,7 +94,7 @@ void autonomous() {
 	pros::Motor intakeR (INTAKE_RIGHT);
 	enum autoType { close_cube, old_auto, five_cube, skills1, three_cube, skills2};
 	int side = -1; // -1 is red; 1 is blue
-	autoType whatAuto = three_cube;
+	autoType whatAuto = skills2;
 	pros::lcd::set_text(4, std::to_string(whatAuto));
 
 	switch (whatAuto) {
