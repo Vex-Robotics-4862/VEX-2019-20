@@ -86,15 +86,13 @@ void autonomous() {
 	pros::Motor rightB (MOTOR_RIGHT_BACK);
 	pros::Motor leftF (MOTOR_LEFT_FRONT, true);
 	pros::Motor rightF (MOTOR_RIGHT_FRONT);
-
-
 	pros::Motor lift (MOTOR_LIFT);
 	pros::Motor tray (MOTOR_TRAY);
 	pros::Motor intakeL (INTAKE_LEFT);
 	pros::Motor intakeR (INTAKE_RIGHT);
 	enum autoType { close_cube, old_auto, five_cube, skills1, three_cube, skills2, test_one_tile};
-	int side = -1; // -1 is red; 1 is blue
-	autoType whatAuto = skills2;
+	int side = 1; // -1 is red; 1 is blue
+	autoType whatAuto = five_cube;
 	pros::lcd::set_text(4, std::to_string(whatAuto));
 
 	switch (whatAuto) {
@@ -146,67 +144,63 @@ void autonomous() {
 	break;
 	// *******
 	case five_cube:
+		intakeL.move(128);
+		intakeR.move(-128);
+		pros::delay(700);
+	intakeL.move_relative(-400,128);
+	intakeR.move_relative(400,128);
+	pros::delay(1000);
 	intakeL.move(128);
-	intakeR.move(-128); //INTAKE
-	pros::delay(250);
-	intakeL.move(-32);
-	intakeR.move(32); //OUTTAKE
-	pros::delay(127);
-	intakeL.move(128);
-	intakeR.move(-128); //INTAKE
-	leftB.move_relative(2240, 75);
-	leftF.move_relative(2240, 75);
-	rightB.move_relative(2240, 75);
-	rightF.move_relative(2240, 75);
-	pros::delay(2900);
-	leftB.move(0);
-	leftF.move(0);
-	rightB.move(0);
-	rightF.move(0);
-	leftB.move_relative(-774*side, 75); //maybe turn a tad more??
-	leftF.move_relative(-774*side, 75);
-	rightB.move_relative(774*side, 75);
-	rightF.move_relative(774*side, 75);
-	pros::delay(100);
-	intakeL.move(0);
-	intakeR.move(0);
-	pros::delay(1300);
-	leftB.move(0);
-	leftF.move(0);
-	rightB.move(0);
-	rightF.move(0);
-	leftB.move_relative(1610, 75);
-	leftF.move_relative(1610, 75);
-	rightB.move_relative(1610, 75);
-	rightF.move_relative(1610, 75);
-	pros::delay(2100);
-	leftB.move(0);
-	leftF.move(0);
-	rightB.move(0);
-	rightF.move(0);
-	intakeL.move_relative(-400,32); //OUTTAKE
-	intakeR.move_relative(400,32);
-	pros::delay(500);
-	intakeL.move(0);
-	intakeR.move(0);
-	tray.move_relative(1100, 80);
-	pros::delay(3000);
-	leftB.move_relative(50, 48);
-	leftF.move_relative(50, 48);
-	rightB.move_relative(50, 48);
-	rightF.move_relative(50, 48);
-	pros::delay(300);
-	leftB.move_relative(-550, 48);
-	leftF.move_relative(-550, 48);
-	rightB.move_relative(-550, 48);
-	rightF.move_relative(-550, 48);
-	pros::delay(1300);
-	tray.move_relative(-800, 127);
-	pros::delay(1500);
-	tray.move(0);
-	intakeL.move(0);
-	intakeR.move(0);
-	break;
+	intakeR.move(-128);
+		leftB.move_relative(2270, 75);
+		leftF.move_relative(2270, 75);
+		rightB.move_relative(2270, 75);
+		rightF.move_relative(2270, 75);
+		pros::delay(3000);
+		leftB.move_relative(-773*side, 75); //maybe turn a tad more??
+		leftF.move_relative(-773*side, 75);
+		rightB.move_relative(773*side, 75);
+		rightF.move_relative(773*side, 75);
+		pros::delay(100);
+		intakeL.move(0);
+		intakeR.move(0);
+		pros::delay(1000);
+		leftB.move(0);
+		leftF.move(0);
+		rightB.move(0);
+		rightF.move(0);
+		leftB.move_relative(1690, 90);
+		leftF.move_relative(1690, 90);
+		rightB.move_relative(1690, 90);
+		rightF.move_relative(1690, 90);
+		pros::delay(2100);
+		leftB.move(0);
+		leftF.move(0);
+		rightB.move(0);
+		rightF.move(0);
+		intakeL.move_relative(-400,32); //OUTTAKE
+		intakeR.move_relative(400,32);
+		pros::delay(300);
+		intakeL.move(0);
+		intakeR.move(0);
+		tray.move_relative(1000, 80);
+		pros::delay(2800);
+		leftB.move_relative(30, 48);
+		leftF.move_relative(30, 48);
+		rightB.move_relative(30, 48);
+		rightF.move_relative(30, 48);
+		pros::delay(260);
+		leftB.move_relative(-550, 60);
+		leftF.move_relative(-550, 60);
+		rightB.move_relative(-550, 60);
+		rightF.move_relative(-550, 60);
+		pros::delay(1000);
+		tray.move_relative(-1000, 127);
+		pros::delay(1500);
+		tray.move(0);
+		intakeL.move(0);
+		intakeR.move(0);
+		break;
 
 	case three_cube:
 	intakeL.move(128);
@@ -499,7 +493,6 @@ void autonomous() {
 	tray.move(0);
 	break;
 
-
 	default:
 	leftB.move_relative(750, 96);
 	leftF.move_relative(750, 96);
@@ -553,7 +546,7 @@ void autonomous() {
  */
 
 
-void opcontrol() {
+ void opcontrol() {
 	pros::Motor left (MOTOR_LEFT_BACK, MOTOR_LEFT_FRONT);
 	pros::Motor right (MOTOR_RIGHT_BACK, MOTOR_RIGHT_FRONT);
 	pros::Motor leftB (MOTOR_LEFT_BACK);
@@ -619,14 +612,14 @@ void opcontrol() {
 					if (liftTimer > 18) { //ex 50 * 40ms delay = 2 seconds
 						tray.move(32);
 					}
-				} else if (tray.get_position() > 400.0) {
+				} else if (tray.get_position() > 500.0) {
 					liftDoubleClick = 3;
-					tray.move(80);
+					tray.move(71);
 
 				} else {
 					liftDoubleClick = 0;
 					liftTimer = 0; //RESET lift timer at this point
-					tray.move(104);
+					tray.move(100);
 					//if (lift.get_position() < 120.0) {
 					//	lift.move(64);
 					//}
@@ -718,8 +711,8 @@ void opcontrol() {
 			intakeL.move(128); //FULL POWER
 			intakeR.move(-128);
 		} else if (controller.get_digital(DIGITAL_L2)) {
-			intakeL.move(-70);
-			intakeR.move(70);
+			intakeL.move(-60);
+			intakeR.move(60);
 		} else if (abs(controller.get_analog(ANALOG_LEFT_X)) < 16) {
 			intakeL.move(0);
 			intakeR.move(0);
