@@ -92,7 +92,7 @@ void autonomous() {
 	pros::Motor tray (MOTOR_TRAY);
 	pros::Motor intakeL (INTAKE_LEFT);
 	pros::Motor intakeR (INTAKE_RIGHT);
-	enum autoType { close_cube, old_auto, five_cube, skills1, three_cube, skills2};
+	enum autoType { close_cube, old_auto, five_cube, skills1, three_cube, skills2, test_one_tile};
 	int side = -1; // -1 is red; 1 is blue
 	autoType whatAuto = skills2;
 	pros::lcd::set_text(4, std::to_string(whatAuto));
@@ -395,57 +395,74 @@ void autonomous() {
 
 	break;
 
+	case test_one_tile:
+	leftB.move_relative(1300, 75);
+	leftF.move_relative(1300, 75);
+	rightB.move_relative(1300, 75);
+	rightF.move_relative(1300, 75);
+	pros::delay(5000);
+
+
+	break;
 
 	case skills2: //30pt maybe 9 stack and 2 towers, red side
 	intakeL.move(128);
 	intakeR.move(-128);
 	pros::delay(300);
 	//start picking up the 9 cubes
-	leftB.move_relative(5100, 75);
-	leftF.move_relative(5100, 75);
-	rightB.move_relative(5000, 75);
-	rightF.move_relative(5000, 75);
+	leftB.move_relative(3250, 75);
+	leftF.move_relative(3250, 75);
+	rightB.move_relative(3150, 75);
+	rightF.move_relative(5150, 75);
 	pros::delay(5000);
-	leftB.move_relative(5000, 75);
-	leftF.move_relative(5000, 75);
-	rightB.move_relative(5100, 75);
-	rightF.move_relative(5100, 75);
+	leftB.move_relative(3250, 75);
+	leftF.move_relative(3250, 75);
+	rightB.move_relative(3350, 75);
+	rightF.move_relative(3350, 75);
 	pros::delay(5000);
 	leftF.move_relative(-235*side, 75);//45 degrees
 	leftB.move_relative(-235*side, 75);
 	rightF.move_relative(235*side, 75);
 	rightB.move_relative(235*side, 75);
 	pros::delay(500);
-	//intake stop and outtake a bit
-	intakeL.move_relative(-400,32);//outtake
-	intakeR.move_relative(400,32);
+	//intake slow
+	intakeL.move(32);
+	intakeR.move(-32);
 	pros::delay(500);
 	//tray movement
-	tray.move_relative(1000,80);
-	pros::delay(2900);
+	leftB.move_relative(400, 48);
+	leftF.move_relative(400, 48);
+	rightB.move_relative(400, 48);
+	rightF.move_relative(400, 48);
+	pros::delay(1000);
+	tray.move_relative(700,80);
+	pros::delay(3900);
+	intakeL.move(0);
+	intakeR.move(0);
+	tray.move_relative(300,50);
+	pros::delay(3900);
 	leftB.move_relative(50, 48);
 	leftF.move_relative(50, 48);
 	rightB.move_relative(50, 48);
 	rightF.move_relative(50, 48);
-	pros::delay(300);
-	leftB.move_relative(-300, 48);//change the value so that it backs to and lines up with the mid tower
-	leftF.move_relative(-300, 48);
-	rightB.move_relative(-300, 48);
-	rightF.move_relative(-300, 48);
-	tray.move_relative(-1000,127);
-	pros::delay(1000);
-	//continune the blue tower code here
-	leftB.move_relative(775*side, 75);
-	leftF.move_relative(775*side, 75);
-	rightB.move_relative(-775*side, 75);
-	rightF.move_relative(-775*side, 75);
+	pros::delay(500);
+	leftB.move_relative(-400, 28);//change the value so that it backs to and lines up with the mid tower
+	leftF.move_relative(-400, 28);
+	rightB.move_relative(-400, 28);
+	rightF.move_relative(-400, 28);
+	tray.move_relative(-700,96);
+	pros::delay(1500);
+	leftB.move_relative(575*side, 55);
+	leftF.move_relative(575*side, 55);
+	rightB.move_relative(-575*side, 55);
+	rightF.move_relative(-575*side, 55);
 	pros::delay(1000);
 	intakeL.move(96);
 	intakeR.move(-96);
-	leftB.move_relative(-2000*side, 75);
-	leftF.move_relative(-2000*side, 75);
-	rightB.move_relative(2000*side, 75);
-	rightF.move_relative(2000*side, 75);
+	leftB.move_relative(1300, 75); //spin ~315 degrees to avoid stack
+	leftF.move_relative(1300, 75);
+	rightB.move_relative(1300, 75);
+	rightF.move_relative(1300, 75);
 	pros::delay(2000);
 	intakeL.move_relative(-420,32); //OUTTAKE
 	intakeR.move_relative(420,32);
@@ -455,7 +472,7 @@ void autonomous() {
 	rightB.move_relative(-100*2.5, 38);
 	rightF.move_relative(-100*2.5, 38);
 	pros::delay(1000);
-	tray.move_relative(540, 70);
+	tray.move_relative(440, 70);
 	pros::delay(500);
 	lift.move_relative(2950, 70);
 	pros::delay(2000);
@@ -477,11 +494,9 @@ void autonomous() {
 	lift.move_relative(-2950, 70);
 	pros::delay(1000);
 	lift.move(0);
-	tray.move_relative(-550, 70);
+	tray.move_relative(-440, 70);
 	pros::delay(1500);
 	tray.move(0);
-
-
 	break;
 
 
